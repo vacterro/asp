@@ -14,3 +14,4 @@
 - 2026-07-15 [T-008] RUN: ship v1.1.0a -> alias 'vac set' official
 - 2026-07-15 [T-009] RUN: ship v1.1.1 -> takeover guard + bootstrap fallback + gitignore/.env guard
 - 2026-07-15 [T-010] RUN: ship v1.1.2 -> publish target user-agnostic (origin / gh account)
+- 2026-07-15 [T-011] RUN: ship v1.1.3 -> self-cleaning (.vac/tmp scratch home, orphan hunt, no-litter rule)

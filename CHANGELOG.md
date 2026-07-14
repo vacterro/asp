@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.3 — 2026-07-15
+- self-cleaning: scratch confined to .vac/tmp/ (deleted at stop/ship), orphan-file hunting with proven-unreferenced guard, no-litter iron rule
+
 ## 1.1.2 — 2026-07-15
 - publish target now user-agnostic: repo's own origin / logged-in gh account — no hardcoded owner
 

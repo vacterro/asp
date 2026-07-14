@@ -36,6 +36,10 @@ Any agent, same three memory files, same loop. Limit hit on one agent →
 Worst crash loses only the in-flight ticket; `git status` shows its edits.
 Chat history is not memory; `.vac/` is. Never store secrets in it.
 
+**Scratch discipline:** any file YOU create that isn't deliverable (repro
+scripts, debug dumps, test scratch, backup copies) goes in `.vac/tmp/` —
+never scattered in the repo. `.vac/tmp/` is disposable and never committed.
+
 `STATE.md` (rewrite): frontmatter `phase` (PLAN|BUILD|CHECK|SHIP|DONE|
 BLOCKED), `task`, `next_action` ("<exact command a cold agent runs first>"),
 `blocker`, `agent`, `updated` (ISO). Body: `## Handoff` — Done / In flight /
@@ -60,8 +64,9 @@ another agent may still be live; confirm takeover with user first. Set
 in `phase`.
 
 **Stop** (`vac stop` or ANY low-context signal — warning, compaction, ~80%
-feel; stop early, never gamble last tokens): STATE handoff + cold-executable
-`next_action` → tick BOARD → say `Saved. On any agent: VACSKILL SET`.
+feel; stop early, never gamble last tokens): delete `.vac/tmp/` contents +
+any debug prints you added → STATE handoff + cold-executable `next_action`
+→ tick BOARD → say `Saved. On any agent: VACSKILL SET`.
 
 **Crash recovery** (died without stop): checkpoints carry it. STATE stale
 but LOG/BOARD newer → trust LOG tail + DOING ticket; `git status` reveals
@@ -100,7 +105,11 @@ verifiable, dependency order; >10 → waves, detail current wave only.
 sweep in signal order, ticket each find, cap 5: failing tests → recent
 commits unverified in LOG → stale TODO/FIXME/HACK → silent failures (empty
 catch, ignored return codes, missing IO error paths) → symmetry gaps
-(save/load, undo/redo, import/export, start/stop, add/remove) → dead code.
+(save/load, undo/redo, import/export, start/stop, add/remove) → dead code
+→ orphan files: zero references in repo (grep filename) + not entry/doc/
+config = delete ticket. Obvious junk (`__pycache__`, `*.pyc`, `.DS_Store`,
+`Thumbs.db`, editor swaps, stale `_vactmp_*`) → delete free; anything
+ambiguous → ticket + confirm with user, never guess-delete.
 Nothing found → LOG `RUN: hunt -> clean`, report, stop. Never invent
 busywork.
 
@@ -156,8 +165,9 @@ else's.
    letters); little change/fix set → `3.2.1`; feature batch → `3.2.0`;
    breaking → major, rare. Update VERSION/package file.
 3. Before any `git add`: .gitignore must cover stack junk + secrets
-   (node_modules, __pycache__, dist, .env*) — missing → write it first.
-   `.env` committed = secrets burned, tell user rotate.
+   (node_modules, __pycache__, dist, .env*, .vac/tmp/) — missing → write it
+   first. `.env` committed = secrets burned, tell user rotate. Delete
+   `.vac/tmp/` + leftover debug prints before staging.
 4. CHANGELOG.md newest-top, 1-2 lines per version. Commit message = that
    line. Push to the repo's `origin` remote.
 5. First publish (no origin): confirm repo name + public/private with
@@ -208,3 +218,5 @@ contradicts files → rebuild from BOARD + LOG evidence, set
 5. Stop on first unexplained error; evidence, not retry-spam. Every loop
    has a cap; hitting a cap = BLOCKED ticket, never silent spinning.
 6. Cooperative handoffs: facts + warnings; next agent never guesses.
+7. Leave no litter: scratch lives in `.vac/tmp/`, gone by stop/ship. Repo
+   orphans deleted only proven-unreferenced or user-confirmed.
