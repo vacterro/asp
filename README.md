@@ -102,7 +102,8 @@ regression test → proof in LOG.
 **Before merging / delivering**
 > `vac ship`
 Diff review: correctness → security → reliability → maintainability.
-P0/P1 fixed on the spot. 100% green → publishes to `github.com/vacterro`:
+P0/P1 fixed on the spot. 100% green → publishes to YOUR GitHub (repo's
+`origin`, or created under your logged-in `gh` account on first ship):
 README refreshed to beautiful, version bumped smallest-step
 (3.1.0 → 3.1.0a micro / 3.2.1 little / 3.2.0 minor), tiny CHANGELOG line,
 commit + push. Red never ships.

@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.2 — 2026-07-15
+- publish target now user-agnostic: repo's own origin / logged-in gh account — no hardcoded owner
+
 ## 1.1.1 — 2026-07-15
 - concurrent-agent takeover guard; new-machine bootstrap fallback in pointer block; .gitignore/.env guard before publish commits
 

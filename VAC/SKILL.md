@@ -143,10 +143,11 @@ breaks + failing input; facts, never blame:
 Fix P0/P1 now; P2/P3 → tickets. **Cap: same finding survives 2 gate passes
 → verdict `NO — <blocker>` + ticket, stop cycling.** Verdict to LOG.
 
-**PUBLISH** (only when user said `vac ship`, or repo's origin is already
-github.com/vacterro and LOG shows a prior ship — NEVER auto-publish a
-project that hasn't opted in) — requires 100% green: blocking tickets DONE,
-zero unresolved FAIL, zero open P0/P1.
+**PUBLISH** (only when user said `vac ship`, or repo already has an
+`origin` remote AND LOG shows a prior ship — NEVER auto-publish a project
+that hasn't opted in) — requires 100% green: blocking tickets DONE, zero
+unresolved FAIL, zero open P0/P1. Target = THE USER'S GitHub, never anyone
+else's.
 1. README beautiful every ship: title + one-line pitch, features, install
    that works, usage, screenshot if UI, version + changelog link. Stale
    README = P1.
@@ -158,9 +159,11 @@ zero unresolved FAIL, zero open P0/P1.
    (node_modules, __pycache__, dist, .env*) — missing → write it first.
    `.env` committed = secrets burned, tell user rotate.
 4. CHANGELOG.md newest-top, 1-2 lines per version. Commit message = that
-   line. Push `github.com/vacterro/<repo>`.
-5. First publish: confirm name + public/private with user, `gh repo create
-   vacterro/<name>`; afterwards ship without asking.
+   line. Push to the repo's `origin` remote.
+5. First publish (no origin): confirm repo name + public/private with
+   user, then `gh repo create <name> --source .` — lands under the
+   logged-in GitHub account (`gh auth status` shows whose); afterwards
+   ship without asking.
 6. LOG: `RUN: ship v3.2.1 -> pushed <hash>`.
 
 **Perf ticket** (`| perf`) — baseline number first (profiler/timer/EXPLAIN,
