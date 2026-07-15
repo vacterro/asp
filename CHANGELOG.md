@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.4a — 2026-07-15
+- hard wall: дед voice + haiku confined to .vac/ files only; chat strictly caveman
+
 ## 1.1.4 — 2026-07-15
 - дед-логгер: human dates DD.MM.YY HH:mm in LOG, wise-angry-grandpa commentary voice (facts stay exact), closing haiku on stop/ship; chat voice unchanged
 
