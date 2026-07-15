@@ -1,7 +1,8 @@
-﻿# Board
+# Board
 ## DOING
 ## TODO
 ## DONE
+- [x] T-027 fix self-inflicted encoding damage + trap logged (verified: od BOM scan clean, 30 unicode chars intact PASS, conf: high)
 - [x] T-026 core reliability audit: 6 logic holes fixed within line budget (verified: 23-key grep PASS, 250 lines exact, conf: high)
 - [x] T-025 drop _archive_versions (verified: identical twins == v1.2.2, recoverable via git show v1.2.2:VAC/SKILL.md PASS, conf: high)
 - [x] T-022 style persistence anchor: STYLE.md Persistence + SKILL loads it upfront (verified: grep anchors PASS, conf: med — дрейф проверяется только временем)
