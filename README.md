@@ -7,11 +7,11 @@
 ASP is a stable, vendor-neutral continuation protocol. Its sole purpose is to guarantee that a completely cold agent with zero chat history can execute `/asp continue` and resume productive work within one minute, without asking the user to repeat context.
 
 ```text
-User  в†’  /asp continue
-Agent в†’  reads STATE ("What do I do right now?")
-Agent в†’  reads BOARD ("What task am I picking up?")
-Agent в†’  reads next_action (executes command)
-Agent в†’  Works.
+User  ->  /asp continue
+Agent ->  reads STATE ("What do I do right now?")
+Agent ->  reads BOARD ("What task am I picking up?")
+Agent ->  reads next_action (executes command)
+Agent ->  Works.
 ```
 
 Instead of writing a README instructing models "how to behave", you drop ASP into your project. Whether you use Claude today and Gemini tomorrow, both agents will instantly negotiate capabilities, follow the state machine, and execute the next action.
