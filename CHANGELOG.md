@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.1.0 -- 2026-07-17
+- refactor: Total Bootstrap Decoupling. Stripped all remaining platform-specific instructions (`CLAUDE.md`, `GEMINI.md`, `VACSKILL:BEGIN`) from the `init.md` core phase. The core is now perfectly sterile and only initializes the `.asp/` directory.
+- chore: Replaced all legacy `VACSKILL:BEGIN` hooks with `ASP:BEGIN` inside the bootstrap scripts.
+
+## 7.0.0 -- 2026-07-17
+- BREAKING / REWRITE: `PROTOCOL.md` has been brutally minimized (< 60 lines). 
+- doc: Removed Abstract, Scope, Adapter Contract, and CLI commands from the core protocol machine document. These have been migrated to `SPEC.md` and `GUIDE.md` to prevent any context distraction.
+- feat: `DONE` phase formally forbidden without successful `VERIFY` (or `MANUAL-VERIFY`), `needs` formalized as strict DAG, and `HUNT` signal dependency rigidly enforced.
+
 ## 6.3.0 -- 2026-07-17
 - BREAKING / REWRITE: `PROTOCOL.md` has been brutally minimized (< 60 lines). 
 - doc: Removed Abstract, Scope, Adapter Contract, and CLI commands from the core protocol machine document. These have been migrated to `SPEC.md` and `GUIDE.md` to prevent any context distraction.

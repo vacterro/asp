@@ -104,3 +104,5 @@
 - [E-103] [parent: E-102] [none] RUN: ship v6.2.0 -> pushed, tag v6.2.0 PASS
 - [E-104] [parent: E-103] [none] DEC: Stripped PROTOCOL.md to <60 lines. Moved CLI to GUIDE.md.
 - [E-105] [parent: E-104] [none] RUN: ship v6.3.0 -> pushed, tag v6.3.0 PASS
+- [E-106] [parent: E-105] [none] DEC: Renamed vacskill to asp globally. Abstracted bootstrap scripts. Added asp_version.
+- [E-107] [parent: E-106] [none] RUN: ship v7.0.0 -> pushed, tag v7.0.0 PASS

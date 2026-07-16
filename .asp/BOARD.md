@@ -2,6 +2,7 @@
 ## DOING
 ## TODO
 ## DONE
+- [x] T-055 ASP v7.0.0 RENAME | files: repo-wide | verify: tests passed, schema versioning enabled, v7.0.0 pushed | needs: T-054
 - [x] T-054 CORE STRIP v6.3.0 | files: PROTOCOL.md, GUIDE.md | verify: v6.3.0 pushed | needs: T-053
 - [x] T-053 STRICT CONFORMANCE REFACTOR | files: PROTOCOL.md, validate.md | verify: v6.2.0 pushed | needs: T-052
 - [x] T-052 REFRAME ASP around Continuation Test | files: README.md, SPEC.md, PROTOCOL.md | verify: v6.1.0 pushed | needs: T-051

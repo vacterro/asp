@@ -1,4 +1,4 @@
-# asp injector вЂ” installs asp as default protocol on every agentic system found.
+# asp injector РІР‚вЂќ installs asp as default protocol on every agentic system found.
 # Run from the clone dir:  powershell -ExecutionPolicy Bypass -File .\inject.ps1
 # Idempotent: safe to re-run any time (skips what's already installed).
 # Also migrates pre-3.0 installs named "VAC".
@@ -19,7 +19,7 @@ if (-not (Test-Path (Join-Path $SkillHome "PROTOCOL.md"))) {
 
 $block = @"
 
-<!-- VACSKILL:BEGIN -->
+<!-- ASP:BEGIN -->
 ## asp protocol (global)
 On "asp SET" / "asp ..." (short alias "vac ...") commands, or when
 project root contains .asp/: read $SkillHome\PROTOCOL.md + $SkillHome\STYLE.md
@@ -28,16 +28,16 @@ Memory: .asp/ at project root - read .asp/STATE.md before work;
 checkpoint BOARD + STATE after every ticket, LOG line after every run.
 Path missing (new machine)? clone github.com/vacterro/vacskill.
 UI work: also obey $SkillHome\UI.md (Win95 dark golden, Verdana, no AA).
-<!-- VACSKILL:END -->
+<!-- ASP:END -->
 "@
 
-# Strip a pre-3.0 <!-- VAC:BEGIN -->..<!-- VAC:END --> block: it points at the
+# Strip a pre-3.0 <!-- ASP:BEGIN -->..<!-- ASP:END --> block: it points at the
 # old VAC\ folder, which no longer exists.
 function Remove-LegacyBlock([string]$file) {
   if (-not (Test-Path $file)) { return $false }
   $text = Get-Content $file -Raw -Encoding utf8
-  if ($text -notmatch '<!-- VAC:BEGIN -->') { return $false }
-  $clean = [regex]::Replace($text, '(?s)\s*<!-- VAC:BEGIN -->.*?<!-- VAC:END -->\s*', "`n")
+  if ($text -notmatch '<!-- ASP:BEGIN -->') { return $false }
+  $clean = [regex]::Replace($text, '(?s)\s*<!-- ASP:BEGIN -->.*?<!-- ASP:END -->\s*', "`n")
   Write-NoBom $file ($clean.TrimEnd() + "`n")
   return $true
 }
@@ -45,11 +45,11 @@ function Remove-LegacyBlock([string]$file) {
 function Add-Block([string]$file) {
   $migrated = Remove-LegacyBlock $file
   if (Test-Path $file) {
-    if (Select-String -Path $file -Pattern "VACSKILL:BEGIN" -Quiet) {
+    if (Select-String -Path $file -Pattern "ASP:BEGIN" -Quiet) {
       if (Select-String -Path $file -Pattern "PROTOCOL\.md" -Quiet) { return "already" }
-      # 3.x block points at SKILL.md вЂ” replace with PROTOCOL.md block
+      # 3.x block points at SKILL.md РІР‚вЂќ replace with PROTOCOL.md block
       $text = Get-Content $file -Raw -Encoding utf8
-      $clean = [regex]::Replace($text, '(?s)\s*<!-- VACSKILL:BEGIN -->.*?<!-- VACSKILL:END -->\s*', "`n")
+      $clean = [regex]::Replace($text, '(?s)\s*<!-- ASP:BEGIN -->.*?<!-- ASP:END -->\s*', "`n")
       Write-NoBom $file ($clean.TrimEnd() + $block + "`n")
       return "block upgraded to PROTOCOL.md"
     }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# asp injector (macOS/Linux) вЂ” installs asp as default on every agentic system found.
+# asp injector (macOS/Linux) РІР‚вЂќ installs asp as default on every agentic system found.
 # Run from clone dir:  bash inject.sh
 # Idempotent: re-run safe. Also migrates pre-3.0 installs named "VAC".
 
@@ -8,7 +8,7 @@ SKILL_HOME="$(cd "$(dirname "$0")/vacskill" 2>/dev/null && pwd)"
 [ -f "$SKILL_HOME/PROTOCOL.md" ] || { echo "FATAL: asp/PROTOCOL.md not found"; exit 1; }
 
 BLOCK="
-<!-- VACSKILL:BEGIN -->
+<!-- ASP:BEGIN -->
 ## asp protocol (global)
 On \"asp SET\" / \"asp ...\" (short alias \"vac ...\") commands, or when
 project root contains .asp/: read $SKILL_HOME/PROTOCOL.md + $SKILL_HOME/STYLE.md
@@ -17,23 +17,23 @@ Memory: .asp/ at project root - read .asp/STATE.md before work;
 checkpoint BOARD + STATE after every ticket, LOG line after every run.
 Path missing (new machine)? clone github.com/vacterro/vacskill.
 UI work: also obey $SKILL_HOME/UI.md (Win95 dark golden, Verdana, no AA).
-<!-- VACSKILL:END -->"
+<!-- ASP:END -->"
 
-# Pre-3.0 block points at the old VAC/ folder вЂ” strip it before adding the new one.
+# Pre-3.0 block points at the old VAC/ folder РІР‚вЂќ strip it before adding the new one.
 strip_legacy_block() { # $1=file
   [ -f "$1" ] || return 1
-  grep -q '<!-- VAC:BEGIN -->' "$1" || return 1
-  sed -i.bak '/<!-- VAC:BEGIN -->/,/<!-- VAC:END -->/d' "$1" && rm -f "$1.bak"
+  grep -q '<!-- ASP:BEGIN -->' "$1" || return 1
+  sed -i.bak '/<!-- ASP:BEGIN -->/,/<!-- ASP:END -->/d' "$1" && rm -f "$1.bak"
   return 0
 }
 
 add_block() { # $1=file
   local migrated=1
   strip_legacy_block "$1" && migrated=0
-  if [ -f "$1" ] && grep -q "VACSKILL:BEGIN" "$1"; then
+  if [ -f "$1" ] && grep -q "ASP:BEGIN" "$1"; then
     if grep -q "PROTOCOL\.md" "$1"; then echo "already"; return; fi
-    # 3.x block points at SKILL.md вЂ” replace with PROTOCOL.md block
-    sed -i.bak '/<!-- VACSKILL:BEGIN -->/,/<!-- VACSKILL:END -->/d' "$1" && rm -f "$1.bak"
+    # 3.x block points at SKILL.md РІР‚вЂќ replace with PROTOCOL.md block
+    sed -i.bak '/<!-- ASP:BEGIN -->/,/<!-- ASP:END -->/d' "$1" && rm -f "$1.bak"
     printf '%s\n' "$BLOCK" >> "$1"; echo "block upgraded to PROTOCOL.md"; return
   fi
   mkdir -p "$(dirname "$1")"; printf '%s\n' "$BLOCK" >> "$1"
