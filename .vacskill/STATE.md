@@ -1,13 +1,11 @@
 ---
 phase: DONE
 task: none
-next_action: "Next change: bump VERSION per scheme, CHANGELOG line, commit, git tag -a, push --tags"
+next_action: "Next change: bump VERSION per scheme, CHANGELOG line, commit, git tag -a, push --tags; re-run inject.ps1 to refresh copies"
 blocker: none
 agent: claude-code
-updated: 2026-07-15T12:50:00Z
+updated: 2026-07-17T01:50:00Z
 ---
 ## Handoff
-Done: v3.1.1 — core audit, 6 logic holes fixed at zero line cost (250 exact).
-Warnings: never write repo files via PowerShell Set-Content/-Encoding utf8 — it adds BOM
-and mangles em-dashes; use the editor tools. Copies (~/.agents, Antigravity) need inject.ps1 re-run.
-Haiku: Правило-призрак / два года никто не звал / хеш вернул из тьмы
+Done: v4.0.0 — skill became protocol: vacskill/PROTOCOL.md canon (240 lines), thin SKILL.md adapter, 9 adapters/, templates/, style/ voices, schemas frozen; injectors upgraded (PROTOCOL.md blocks, no-BOM writes).
+Warnings: copies (~/.agents, Antigravity x2) refresh only via inject.ps1 re-run; PowerShell Set-Content is banned (traps.md) — injector now uses Write-NoBom.

@@ -6,11 +6,15 @@
 param([string]$SkillHome = (Join-Path $PSScriptRoot "vacskill"))
 
 $ErrorActionPreference = "Continue"
+$Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+function Write-NoBom([string]$file, [string]$text) {
+  [System.IO.File]::WriteAllText($file, $text, $Utf8NoBom)
+}
 try { $SkillHome = (Resolve-Path $SkillHome).Path } catch {
   Write-Host "FATAL: vacskill folder not found at $SkillHome" -ForegroundColor Red; exit 1
 }
-if (-not (Test-Path (Join-Path $SkillHome "SKILL.md"))) {
-  Write-Host "FATAL: SKILL.md missing in $SkillHome" -ForegroundColor Red; exit 1
+if (-not (Test-Path (Join-Path $SkillHome "PROTOCOL.md"))) {
+  Write-Host "FATAL: PROTOCOL.md missing in $SkillHome" -ForegroundColor Red; exit 1
 }
 
 $block = @"
@@ -18,7 +22,7 @@ $block = @"
 <!-- VACSKILL:BEGIN -->
 ## vacskill protocol (global)
 On "VACSKILL SET" / "vacskill ..." (short alias "vac ...") commands, or when
-project root contains .vacskill/: read $SkillHome\SKILL.md + $SkillHome\STYLE.md
+project root contains .vacskill/: read $SkillHome\PROTOCOL.md + $SkillHome\STYLE.md
 and follow them.
 Memory: .vacskill/ at project root - read .vacskill/STATE.md before work;
 checkpoint BOARD + STATE after every ticket, LOG line after every run.
@@ -34,20 +38,28 @@ function Remove-LegacyBlock([string]$file) {
   $text = Get-Content $file -Raw -Encoding utf8
   if ($text -notmatch '<!-- VAC:BEGIN -->') { return $false }
   $clean = [regex]::Replace($text, '(?s)\s*<!-- VAC:BEGIN -->.*?<!-- VAC:END -->\s*', "`n")
-  Set-Content -Path $file -Value $clean.TrimEnd() -Encoding utf8
+  Write-NoBom $file ($clean.TrimEnd() + "`n")
   return $true
 }
 
 function Add-Block([string]$file) {
   $migrated = Remove-LegacyBlock $file
   if (Test-Path $file) {
-    if (Select-String -Path $file -Pattern "VACSKILL:BEGIN" -Quiet) { return "already" }
-    Add-Content -Path $file -Value $block -Encoding utf8
+    if (Select-String -Path $file -Pattern "VACSKILL:BEGIN" -Quiet) {
+      if (Select-String -Path $file -Pattern "PROTOCOL\.md" -Quiet) { return "already" }
+      # 3.x block points at SKILL.md — replace with PROTOCOL.md block
+      $text = Get-Content $file -Raw -Encoding utf8
+      $clean = [regex]::Replace($text, '(?s)\s*<!-- VACSKILL:BEGIN -->.*?<!-- VACSKILL:END -->\s*', "`n")
+      Write-NoBom $file ($clean.TrimEnd() + $block + "`n")
+      return "block upgraded to PROTOCOL.md"
+    }
+    $text = Get-Content $file -Raw -Encoding utf8
+    Write-NoBom $file ($text.TrimEnd() + $block + "`n")
     return $(if ($migrated) { "migrated from VAC" } else { "block added" })
   }
   $dir = Split-Path $file
   if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force $dir | Out-Null }
-  Set-Content -Path $file -Value $block.TrimStart() -Encoding utf8
+  Write-NoBom $file ($block.TrimStart() + "`n")
   return "file created"
 }
 
@@ -84,7 +96,7 @@ function Add-Junction([string]$target, [string]$legacy) {
 function Copy-Skill([string]$dst, [string]$legacy) {
   if ($legacy) { Remove-LegacySkill $legacy | Out-Null }
   if (-not (Test-Path $dst)) { New-Item -ItemType Directory -Force $dst | Out-Null }
-  Copy-Item (Join-Path $SkillHome "SKILL.md"),(Join-Path $SkillHome "UI.md"),(Join-Path $SkillHome "STYLE.md") $dst -Force
+  Copy-Item (Join-Path $SkillHome "SKILL.md"),(Join-Path $SkillHome "PROTOCOL.md"),(Join-Path $SkillHome "UI.md"),(Join-Path $SkillHome "STYLE.md") $dst -Force
 }
 
 $h = $env:USERPROFILE
@@ -135,23 +147,23 @@ if (Test-Path $plugRoot) {
 
 # --- Aider ---
 $aider = "$h\.aider.conf.yml"
-$skillPath = Join-Path $SkillHome "SKILL.md"
+$skillPath = Join-Path $SkillHome "PROTOCOL.md"
 if (Get-Command aider -ErrorAction SilentlyContinue) {
   if (Test-Path $aider) {
     $conf = Get-Content $aider -Raw -Encoding utf8
-    if ($conf -match 'VACSKILLS?[\\/]VAC[\\/]SKILL\.md') {   # pre-3.0 path -> repoint
-      Set-Content $aider ($conf -replace '.*VACSKILLS?[\\/]VAC[\\/]SKILL\.md', "  - $skillPath") -Encoding utf8
-      [void]$report.Add(@("Aider conf", "migrated from VAC"))
+    if ($conf -match '[\\/](VAC|vacskill)[\\/]SKILL\.md') {   # pre-4.0 path -> repoint
+      Write-NoBom $aider ($conf -replace '.*[\\/](VAC|vacskill)[\\/]SKILL\.md', "  - $skillPath")
+      [void]$report.Add(@("Aider conf", "migrated to PROTOCOL.md"))
     } elseif ($conf -match [regex]::Escape($skillPath)) {
       [void]$report.Add(@("Aider conf", "already"))
     } elseif ($conf -notmatch '(?m)^read:') {
-      Add-Content $aider "`n# vacskill protocol auto-loaded`nread:`n  - $skillPath`n" -Encoding utf8
+      Write-NoBom $aider ($conf.TrimEnd() + "`n`n# vacskill protocol auto-loaded`nread:`n  - $skillPath`n")
       [void]$report.Add(@("Aider conf", "read: appended"))
     } else {
       [void]$report.Add(@("Aider conf", "has own read: - add manually: $skillPath"))
     }
   } else {
-    Set-Content $aider "# vacskill protocol auto-loaded`nread:`n  - $skillPath`n" -Encoding utf8
+    Write-NoBom $aider "# vacskill protocol auto-loaded`nread:`n  - $skillPath`n"
     [void]$report.Add(@("Aider conf", "created"))
   }
 } else { [void]$report.Add(@("Aider", "not installed - skip")) }

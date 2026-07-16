@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.0.0 — 2026-07-17
+- BREAKING: skill → protocol. vacskill/PROTOCOL.md is the single vendor-neutral canon (240 lines, capability degradation table included); SKILL.md shrunk to a thin skill-reader adapter. New: adapters/ (9 platforms), templates/ (init boilerplate), style/ (opt-in voices), schemas/ frozen for a future orchestrator. Injectors point everything at PROTOCOL.md, upgrade stale 3.x blocks, and write UTF-8 without BOM. Positioning: vendor-neutral project execution protocol for LLM agents
+
 ## 3.1.2 — 2026-07-16
 - hotfix: ensure FreeBuff and Antigravity plugins receive copy, not junction, as their scanners ignore symlinks
 

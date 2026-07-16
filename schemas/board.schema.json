@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VAC BOARD Schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": ["TODO", "DOING", "DONE"]
+      },
+      "id": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "files": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "verify": {
+        "type": "string"
+      },
+      "needs": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "required": ["status", "id", "description"]
+  }
+}

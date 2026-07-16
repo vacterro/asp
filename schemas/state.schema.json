@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VAC STATE Schema",
+  "type": "object",
+  "properties": {
+    "phase": {
+      "type": "string",
+      "enum": ["PLAN", "SCOUT", "BUILD", "VERIFY", "REVIEW", "SHIP", "DONE", "BLOCKED"]
+    },
+    "task": {
+      "type": "string"
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "blocker": {
+      "type": "string"
+    },
+    "agent": {
+      "type": "string"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["phase", "task", "next_action"]
+}

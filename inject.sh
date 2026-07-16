@@ -5,13 +5,13 @@
 
 set -u
 SKILL_HOME="$(cd "$(dirname "$0")/vacskill" 2>/dev/null && pwd)"
-[ -f "$SKILL_HOME/SKILL.md" ] || { echo "FATAL: vacskill/SKILL.md not found"; exit 1; }
+[ -f "$SKILL_HOME/PROTOCOL.md" ] || { echo "FATAL: vacskill/PROTOCOL.md not found"; exit 1; }
 
 BLOCK="
 <!-- VACSKILL:BEGIN -->
 ## vacskill protocol (global)
 On \"VACSKILL SET\" / \"vacskill ...\" (short alias \"vac ...\") commands, or when
-project root contains .vacskill/: read $SKILL_HOME/SKILL.md + $SKILL_HOME/STYLE.md
+project root contains .vacskill/: read $SKILL_HOME/PROTOCOL.md + $SKILL_HOME/STYLE.md
 and follow them.
 Memory: .vacskill/ at project root - read .vacskill/STATE.md before work;
 checkpoint BOARD + STATE after every ticket, LOG line after every run.
@@ -30,7 +30,12 @@ strip_legacy_block() { # $1=file
 add_block() { # $1=file
   local migrated=1
   strip_legacy_block "$1" && migrated=0
-  if [ -f "$1" ] && grep -q "VACSKILL:BEGIN" "$1"; then echo "already"; return; fi
+  if [ -f "$1" ] && grep -q "VACSKILL:BEGIN" "$1"; then
+    if grep -q "PROTOCOL\.md" "$1"; then echo "already"; return; fi
+    # 3.x block points at SKILL.md — replace with PROTOCOL.md block
+    sed -i.bak '/<!-- VACSKILL:BEGIN -->/,/<!-- VACSKILL:END -->/d' "$1" && rm -f "$1.bak"
+    printf '%s\n' "$BLOCK" >> "$1"; echo "block upgraded to PROTOCOL.md"; return
+  fi
   mkdir -p "$(dirname "$1")"; printf '%s\n' "$BLOCK" >> "$1"
   [ $migrated -eq 0 ] && echo "migrated from VAC" || echo "block added"
 }
@@ -57,7 +62,7 @@ add_link() { # $1=target $2=legacy
 copy_skill() { # $1=dst $2=legacy
   [ -n "${2:-}" ] && rm_legacy "$2"
   mkdir -p "$1"
-  cp "$SKILL_HOME/SKILL.md" "$SKILL_HOME/UI.md" "$SKILL_HOME/STYLE.md" "$1/"
+  cp "$SKILL_HOME/SKILL.md" "$SKILL_HOME/PROTOCOL.md" "$SKILL_HOME/UI.md" "$SKILL_HOME/STYLE.md" "$1/"
 }
 
 echo "vacskill injector (source: $SKILL_HOME)"
@@ -82,13 +87,14 @@ else printf '%-28s %s\n' "~/.agents" "not installed - skip"; fi
 
 if command -v aider >/dev/null 2>&1; then
   A="$HOME/.aider.conf.yml"
-  if [ ! -f "$A" ]; then printf '# vacskill protocol auto-loaded\nread:\n  - %s\n' "$SKILL_HOME/SKILL.md" > "$A"; printf '%-28s %s\n' "Aider conf" "created"
-  elif grep -qE 'VACSKILLS?/VAC/SKILL\.md' "$A"; then
-    sed -i.bak "s#.*VACSKILLS\{0,1\}/VAC/SKILL\.md#  - $SKILL_HOME/SKILL.md#" "$A" && rm -f "$A.bak"
-    printf '%-28s %s\n' "Aider conf" "migrated from VAC"
-  elif grep -qF "$SKILL_HOME/SKILL.md" "$A"; then printf '%-28s %s\n' "Aider conf" "already"
-  elif ! grep -q "^read:" "$A"; then printf '\n# vacskill protocol auto-loaded\nread:\n  - %s\n' "$SKILL_HOME/SKILL.md" >> "$A"; printf '%-28s %s\n' "Aider conf" "read: appended"
-  else printf '%-28s %s\n' "Aider conf" "has own read: - add manually: $SKILL_HOME/SKILL.md"; fi
+  P="$SKILL_HOME/PROTOCOL.md"
+  if [ ! -f "$A" ]; then printf '# vacskill protocol auto-loaded\nread:\n  - %s\n' "$P" > "$A"; printf '%-28s %s\n' "Aider conf" "created"
+  elif grep -qE '/(VAC|vacskill)/SKILL\.md' "$A"; then
+    sed -i.bak "s#.*/\(VAC\|vacskill\)/SKILL\.md#  - $P#" "$A" && rm -f "$A.bak"
+    printf '%-28s %s\n' "Aider conf" "migrated to PROTOCOL.md"
+  elif grep -qF "$P" "$A"; then printf '%-28s %s\n' "Aider conf" "already"
+  elif ! grep -q "^read:" "$A"; then printf '\n# vacskill protocol auto-loaded\nread:\n  - %s\n' "$P" >> "$A"; printf '%-28s %s\n' "Aider conf" "read: appended"
+  else printf '%-28s %s\n' "Aider conf" "has own read: - add manually: $P"; fi
 else printf '%-28s %s\n' "Aider" "not installed - skip"; fi
 
 echo "------------------------------------------------------------"
