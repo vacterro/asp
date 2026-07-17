@@ -19,6 +19,13 @@ Agent ->  Works.
 
 Instead of writing a README instructing models "how to behave", you drop ASP into your project. Whether you use Claude today and Gemini tomorrow, both agents will instantly negotiate capabilities, follow the state machine, and execute the next action.
 
+### Automated Continuous Evolution
+When your project has no active tasks, just type `/asp`. The protocol automatically triggers:
+1. **HUNT**: A deep audit for bugs, failing tests, and dead code.
+2. **ADD**: If the code is perfectly clean, the agent brainstorms and safely implements ONE missing core feature (focusing on state persistence, user control, and industry standards).
+
+It never spins its wheels. It just safely evolves your app step-by-step without you lifting a finger.
+
 ## Quick Start (5 minutes)
 
 **1. Install Globally (Once per machine)**
