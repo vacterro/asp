@@ -4,6 +4,9 @@
 
 **One command. Zero amnesia.**
 
+[![Russian Guide](https://img.shields.io/badge/📖_ELI5_Guide-НА_РУССКОМ-red?style=for-the-badge)](GUIDE_RU.md)
+[![English Guide](https://img.shields.io/badge/📖_ELI5_Guide-IN_ENGLISH-blue?style=for-the-badge)](GUIDE_EN.md)
+
 ASP is a stable, vendor-neutral continuation protocol. Its sole purpose is to guarantee that a completely cold agent with zero chat history can execute `/asp continue` and resume productive work within one minute, without asking the user to repeat context.
 
 ```text
@@ -38,4 +41,3 @@ No install? Paste one line to your agent:
 - **[SPEC.md](SPEC.md)**: The formal RFC specification. Read this if you are building extensions or agent frameworks.
 - **[RFC.md](asp/RFC.md)**: The brutal, machine-readable ruleset that agents execute.
 - **[GUIDE.md](GUIDE.md)**: The human tutorial with examples.
-- **ELI5 Guides (Grandpa Style)**: [GUIDE_RU.md](GUIDE_RU.md) | [GUIDE_EN.md](GUIDE_EN.md)
