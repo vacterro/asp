@@ -5,7 +5,9 @@
 ## TODO
 ## TODO
 ## TODO
+## TODO
 ## DONE
+- [x] T-065 ADD: .saipen/kitchen/ to canonical file model | files: saipen/RFC.md, GUIDE*.md | verify: documented intermediate files storage | needs: none
 - [x] T-064 FIX: SAIPEN project nested in _ASP directory | files: _SAIPEN | verify: project is flat at V:\___VAC\__K\__CODE\_AI_STUFF_AGENTIC\_SAIPEN | needs: none
 - [x] T-063 ADD: §10 Phase Loading in RFC | files: saipen/RFC.md | verify: explicitly prevents loading local phases and hallucinating | needs: none
 - [x] T-062 ADD: CLEAN phase and saipen clean trigger | files: saipen/phases/clean.md, saipen/RFC.md, GUIDE*.md | verify: saipen clean commands documented and protocol updated | needs: none

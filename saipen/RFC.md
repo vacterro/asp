@@ -10,6 +10,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **BOARD.md**: MUST track `status` (TODO/DOING/DONE), `needs:` (dependencies), and `owner` (claims).
 - **LOG.md**: Append-only event graph. MUST use Event IDs (`[E-001]`) and MAY use `parent_id` (`[parent: E-001]`).
 - **KNOWLEDGE/**: Directory for durable truths. MUST NOT contain event histories. Uses ADR pattern (`ADR-001.md`).
+- **kitchen/**: Directory for intermediate, half-finished files, scratchpads, and work-in-progress data. Agents MUST store temporary work here to avoid cluttering the project root. If an agent terminates mid-task, the successor MUST inspect `kitchen/` to resume work seamlessly.
 
 ## 3. State Machine Transitions
 `INIT → PLAN → SCOUT → BUILD → VERIFY → REVIEW → SHIP → DONE | BLOCKED | HUNT | ADD | CLEAN`
@@ -52,8 +53,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 ## 9. Workspace Hygiene
 The protocol lives in the SAIPEN home; the project holds work, not protocol copies.
 - Protocol files (`RFC.md`, `STYLE.md`, `UI.md`, `SKILL.md`, `phases/`) MUST NOT be copied into the project. Agents read them from the SAIPEN home; the pointer block in `AGENTS.md` gives the path.
-- Project memory MUST live in `.saipen/` under canonical names only: `STATE.md`, `BOARD.md`, `LOG.md`, `KNOWLEDGE/`. Ad-hoc names (`CONTEXT.md`, `MEMORY.md`, `NOTES.md`) are non-conformant — fold their content into the canonical file (`CONTEXT` → `KNOWLEDGE/`, `MEMORY` → `LOG.md`) and delete the stray.
-- Every `.md` MUST earn its place: one purpose, no duplication, no filler. On checkpoint, agent MUST prune generated litter (`__pycache__`, editor swaps, empty scaffold files) and MUST NOT create a file it will not maintain.
+- Project memory MUST live in `.saipen/` under canonical names only: `STATE.md`, `BOARD.md`, `LOG.md`, `KNOWLEDGE/`, `kitchen/`. Ad-hoc names (`CONTEXT.md`, `MEMORY.md`, `NOTES.md`) are non-conformant — fold their content into the canonical file (`CONTEXT` → `KNOWLEDGE/`, `MEMORY` → `LOG.md`) and delete the stray.
+- Every `.md` MUST earn its place: one purpose, no duplication, no filler. On checkpoint, agent MUST prune generated litter (`__pycache__`, editor swaps, empty scaffold files) and MUST NOT create a file it will not maintain. Active intermediate work MUST be placed in `kitchen/`.
 - Deliverables (client-facing outputs) live at project root and are exempt; they are work, not protocol.
 
 ## 10. Phase Loading

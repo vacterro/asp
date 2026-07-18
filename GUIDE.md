@@ -27,11 +27,12 @@ While agents interact with the file system directly, you just type normal chat m
 | `saipen GOAL <text>` | Overrides current tasks and sets a new high-level plan. |
 | `saipen clean` | Forces the agent to scrub the workspace, prune old done tickets, remove orphaned files, fix bad paths, and ensure everything is updated. |
 
-## Adding Project Knowledge
+## Project Knowledge & Kitchen
 Don't put project-specific rules in the global agent prompts. Put them in `.saipen/KNOWLEDGE/`!
-- Create a file like `.saipen/KNOWLEDGE/ADR-001-database.md`.
-- Tell the agent: "Always use PostgreSQL according to ADR-001".
-- The agent will now obey this forever, and any future agent will too.
+- Create ADRs (Architecture Decision Records) or simple text files.
+- The agent reads everything here before it starts planning.
+
+The agent also has a `.saipen/kitchen/` directory. It uses this to store intermediate, half-finished files and scratchpads. If an agent dies mid-process, the next agent can just look into the `kitchen/` and immediately pick up where it left off.
 
 
 <p align="center">

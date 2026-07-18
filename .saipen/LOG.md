@@ -122,3 +122,4 @@
 - [E-034] [parent: E-033] [T-064] RUN: unnest SAIPEN project from _ASP folder. Project is now flat.
 - [E-035] [parent: E-034] [T-063] RUN: implement §10 Phase Loading in RFC to prevent hallucinated per-project phases.
 - [E-036] [parent: E-035] [T-063] RUN: FastPrompter cleanup: backed up and removed localized phases/protocol files.
+- [E-037] [parent: E-036] [T-065] RUN: implement .saipen/kitchen/ as canonical intermediate storage for seamless continuation.

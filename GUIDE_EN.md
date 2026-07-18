@@ -33,6 +33,8 @@ It will grumble, create an `.saipen/` folder, and start writing a list of tasks 
 
 And if you need it to permanently remember that you only use Tabs and not Spaces — toss a text file into `.saipen/KNOWLEDGE/`. It will read it like the Ten Commandments before every single task.
 
+The agent also has a `.saipen/kitchen/` folder. This is its workbench. It drops all its half-finished files, scratchpads, and intermediate drafts here so it doesn't litter your main project. If an agent dies mid-task, the next one picks up right from the kitchen.
+
 **Step 4. Evolution (for lazy asses)**
 Board empty? Bored? Just type `saipen` again.
 Since there's no active work, the agent won't whine 'how can I help?'. It automatically jumps to **HUNT**, seeks bugs. No bugs? Hits **ADD** and builds a new feature by strict rules: zero hardcoding, bulletproof persistence, user controls everything. You just sit, smoke, watch the app grow muscles itself.

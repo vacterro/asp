@@ -17,6 +17,7 @@ Deep repository scrub. Execute strictly in order.
 4. **Trash Removal:**
    - Delete temporary files, caches, and scaffold leftovers (e.g., `__pycache__`, `.tmp`, outdated `.bak` files).
    - Clear out empty directories.
+   - **DO NOT** delete files in `.saipen/kitchen/` unless they are explicitly stale or the project is fully completed.
 
 5. **Freshness Check:**
    - Ensure the repository is up to date with correct paths.
