@@ -20,7 +20,14 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **MANUAL-VERIFY**: If `mode: manual-verify`, `VERIFY` MUST block and await human confirmation. Agent MUST NOT auto-transition to `REVIEW`.
 - **DONE**: A ticket MUST NOT be marked `DONE` without a successful `VERIFY` (or human `MANUAL-VERIFY`).
 - **HUNT**: Transition to `HUNT` MUST occur strictly when `BOARD.md` has no open `TODO` tickets without blockers, or when explicitly signaled by a failed verification loop. Agent MUST NOT hallucinate tasks during `HUNT`.
-- **ADD**: Transition to `ADD` occurs when instructed to brainstorm and implement new features based on core UX rules.
+- **ADD**: Agent MUST evolve the software conservatively.
+  Priority:
+  1. Missing complementary functionality (Bold → Italic)
+  2. Missing standard workflow (Open → Save As)
+  3. Missing UX consistency (Toolbar action without shortcut)
+  4. Missing platform conventions
+  
+  Agent MUST NOT invent speculative, experimental, or unrelated features. After every ADD, transition to VERIFY, then HUNT. Only if HUNT is clean may another ADD begin.
 - **CLEAN**: Transition to `CLEAN` occurs when explicitly triggered by user via `saipen clean`. Agent MUST audit and prune stale tickets, orphaned files, and broken paths before returning to `DONE`.
 - **DEFAULT BEHAVIOR**: The bare command `saipen` is an alias for `saipen continue`. If there are pending tickets on `BOARD.md`, the agent MUST resume work. If the user runs the protocol (e.g., `saipen` or `saipen continue`) and `BOARD.md` is empty (no open tickets), the agent MUST immediately transition to the `HUNT` phase to search for bugs. If `HUNT` finds nothing (clean), the agent MUST immediately transition to `ADD` to evolve the software.
 

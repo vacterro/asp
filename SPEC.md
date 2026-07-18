@@ -5,6 +5,8 @@
 
 SAIPEN is a portable, file-backed continuation protocol for LLM agents. Implementations MAY vary. The on-disk contract MUST remain stable. Everything in this protocol exists to serve the Continuation Test.
 
+SAIPEN is evolutionary, not creative. Its purpose is to complete software, not reinvent it. ADD extends existing design patterns, industry conventions, and obvious feature symmetry.
+
 - **`STATE`**: Exists to answer *"What do I do right now?"*
 - **`BOARD`**: Exists to answer *"What task am I picking up?"*
 - **`LOG`**: Exists to answer *"Why did we come to this point?"*
