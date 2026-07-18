@@ -13,6 +13,15 @@ SAIPEN is evolutionary, not creative. Its purpose is to complete software, not r
 - **`KNOWLEDGE`**: Exists to answer *"What is the durable truth of this project?"*
 - **`next_action`**: The heart of SAIPEN. It answers *"What exact command do I execute right this second to resume work?"*
 
+## The SAIPEN Litmus Test
+
+Any proposed change or new idea for the protocol MUST pass the following three questions:
+1. Does it make the transition between agents more reliable?
+2. Does it make the behavior of different models more uniform?
+3. Does it reduce the probability of context loss?
+
+If the answer is "no" to at least two of these questions, the idea is rejected. SAIPEN prioritizes discipline, reproducibility, and reliability over novelty.
+
 ## Architecture
 
 The protocol is strictly normative. SAIPEN conceptually divides into two layers: **Core** and **Engineering**. 
