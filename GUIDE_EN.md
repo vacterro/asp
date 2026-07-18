@@ -42,6 +42,20 @@ Type `saipen clean`. The agent will roll up its sleeves, prune your old finished
 
 Any questions? No? Then get back to work.
 
+## All Commands & Use Scenarios (Cheat Sheet)
+
+Think of the agent as a smart dog. These are the commands you use to tell it what to do.
+
+| Command | What it does (ELI5) | When to use it (Scenario) |
+|---|---|---|
+| `saipen SET` | **The On-Switch.** Creates the memory folder (`.saipen/`) and starts the first planning session. | *Scenario:* You just opened a completely new project folder and want the agent to start managing it. |
+| `saipen continue` | **The Workhorse.** Tells the agent to shut up, read its notes, pick the top task from the board, and do it. | *Scenario:* You come back from lunch, open a blank chat, and want the agent to resume coding exactly where it left off. |
+| `saipen stop` | **The Brakes.** Forces the agent to stop what it's doing, save its progress, and wait for you. | *Scenario:* The agent is going down a rabbit hole or you need to urgently push code to production. |
+| `saipen status` | **The Status Report.** The agent looks at the board and tells you what's done and what's next, without touching the code. | *Scenario:* You haven't checked the project in a week and just want to know what the current plan is. |
+| `saipen GOAL <text>` | **The Boss Move.** Throws the current plan out the window and forces the agent to focus on a new high-level objective. | *Scenario:* The boss just called and said "Pivot everything, we're building a crypto app now." You type `saipen GOAL build crypto app`. |
+| `saipen clean` | **The Janitor.** The agent scrubs the repository, deletes orphaned files, fixes bad links, and prunes old done tasks. | *Scenario:* Your repo is full of `.tmp` files, old `TODO`s, and dead code, and you want a fresh start before a major release. |
+| `saipen` | **The Auto-Pilot.** Kicks off the HUNT phase to find bugs, or the ADD phase to build new features if no bugs exist. | *Scenario:* The project is done, the board is empty, but you want the agent to proactively improve the app while you watch YouTube. |
+
 
 <p align="center">
   <img src="assets/SAIPEN_design2_alpha.png" alt="SAIPEN Stamp" width="120"/>
