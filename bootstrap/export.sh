@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# saipen state exporter (macOS/Linux)
+set -u
+
+PROJECT_ROOT="$(pwd)"
+SAIPEN_DIR="$PROJECT_ROOT/.saipen"
+
+if [ ! -d "$SAIPEN_DIR" ]; then
+    echo "No .saipen directory found in $PROJECT_ROOT."
+    exit 1
+fi
+
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+TAR_NAME="saipen_export_${TIMESTAMP}.tar.gz"
+
+echo "saipen state exporter"
+echo "------------------------------------------------------------"
+echo "Archiving: $SAIPEN_DIR"
+tar -czf "$TAR_NAME" -C "$PROJECT_ROOT" .saipen
+echo "Done. Export saved to: $PROJECT_ROOT/$TAR_NAME"
+echo "------------------------------------------------------------"

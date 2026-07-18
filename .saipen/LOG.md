@@ -116,3 +116,5 @@
 - [E-028] [parent: E-027] [T-059] RUN: inject.ps1/.sh update -> ADD phase: implemented automatic config backups (.bak) to satisfy Industry Standards rule.
 - [E-029] [parent: E-028] [T-none] RUN: hunt -> clean @7a26b5d. Transitioning to ADD phase.
 - [E-030] [parent: E-029] [T-060] RUN: implement uninstall.ps1/sh -> ADD phase complete: Uninstaller provides max user control for removal.
+- [E-031] [parent: E-030] [T-none] RUN: hunt -> clean @0932f65. Transitioning to ADD phase.
+- [E-032] [parent: E-031] [T-061] RUN: implement export.ps1/sh -> ADD phase complete: Export satisfies memory backup rule.
