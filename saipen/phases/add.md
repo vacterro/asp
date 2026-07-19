@@ -8,10 +8,10 @@ Activate this mode to systematically expand the software's capabilities. SAIPEN 
    ```pseudocode
    FOR priority IN [
      "bugfix", 
-     "complementary_feature (Bold->Italic)", 
-     "workflow_step (Open->Save_As)", 
+     "complementary_feature (e.g. Bold->Italic, Apply->Save/Cancel)", 
+     "workflow_step (e.g. Copy/Paste, Import/Export, Backup)", 
      "ux_consistency", 
-     "platform_convention"
+     "platform_convention (industry standard functions, bilingual support)"
    ]:
      IF exists(priority):
        IF priority == "bugfix":
@@ -22,7 +22,8 @@ Activate this mode to systematically expand the software's capabilities. SAIPEN 
    
    RETURN DONE
    ```
-
+   
+   **Contextual Completeness**: Whenever the agent adds a new function (e.g., an 'Apply' button), it MUST check if the context requires complementary controls (e.g., 'Save', 'Cancel', 'Stop') to ensure the software meets modern industrial standards for user control.
 3. **Act:**
    - Pick exactly ONE obvious missing capability.
    - If the product is already mature and logically complete, **STOP**. Transition to `DONE` without hallucinating unnecessary features. Graceful completion is a successful outcome.

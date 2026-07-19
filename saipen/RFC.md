@@ -64,10 +64,10 @@ When the Core state machine reaches a halt (no pending tickets), the Maintenance
   ```pseudocode
   FOR priority IN [
     "bugfix", 
-    "complementary_feature (Bold->Italic)", 
-    "workflow_step (Open->Save_As)", 
+    "complementary_feature (e.g. Bold->Italic, Apply->Save/Cancel)", 
+    "workflow_step (e.g. Copy/Paste, Import/Export, Backup)", 
     "ux_consistency", 
-    "platform_convention"
+    "platform_convention (industry standard functions, bilingual support)"
   ]:
     IF exists(priority):
       IF priority == "bugfix":
