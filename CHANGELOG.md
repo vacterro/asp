@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.4.4 -- 2026-07-19
+- fix: Audited another agent's unreviewed commits to this repo (§1.8 Batch Input Parsing, Zero-Prompt Auto-Transition, TRANSLATE phase, ADD baseline constraints -- f709eed/57cb87f/a463be2, all confirmed sound). Found and fixed three real gaps in the new `phases/translate.md`: (1) "the kitchen" was ambiguous against §1.2's single `kitchen/` definition and contradicted the phase's own isolation rule -- `.saitranslate/kitchen/` is now explicit and cross-referenced from RFC.md §1.2; (2) "drawn flag icon" assumed image-generation tooling most text agents don't have -- Unicode flag emoji is now the stated universal baseline; (3) completion LOG line was free-text, tightened to the same exact-format convention as `hunt.md`. Also restructured `add.md`: Baseline Architectural Constraints (session persistence, no hardcoding) were nested inside the Industrial Completion Rule's bullet list despite being a distinct, always-applicable concern -- now its own numbered item.
+
 ## 7.4.3 -- 2026-07-19
 - docs: README trimmed 79 -> 65 lines -- cut redundant/flavor prose (two intro paragraphs saying the same thing twice, decorative asides in the Evolution section), kept every fact intact (GOAL Mode safety valve, auto-push scope, VERIFY/REVIEW guarantee, install commands). Also fixed a stale version badge (was still showing v7.2.0).
 

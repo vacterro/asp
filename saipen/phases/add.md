@@ -33,8 +33,13 @@ Activate this mode to systematically expand the software's capabilities. SAIPEN 
    - When the user requests one step of a well-known user workflow, you MUST evaluate what else is needed to make the feature industrially complete.
    - You MUST implement the *minimal coherent set* (e.g., adding "Cancel" and "Save" if asked for "Apply").
    - The smallest complete solution wins. Do not build massive epics (e.g., do not add Cloud Sync when asked for Export).
-   - **Baseline Architectural Constraints**: 
-     - *Session Persistence*: State (window position, size, toggles, themes) MUST save and restore between sessions.
-     - *No Hardcoding*: Prefer user-editable configurations (keybinds, controls, templates) over hardcoded values.
    - Complete before you extend: finish the requested workflow before proposing a different one (e.g., "Login" implies "Logout" — not OAuth or SSO). The agent SHOULD preserve user expectations before introducing new capabilities.
-   - Every addition MUST pass full `VERIFY` before another `HUNT` begins. Only if `HUNT` is clean may another `ADD` begin.
+
+5. **Baseline Architectural Constraints** (apply to every `ADD`, whether or
+   not the Industrial Completion Rule is in play):
+   - *Session Persistence*: state the user can see or set (window position,
+     size, toggles, themes) MUST save and restore between sessions.
+   - *No Hardcoding*: prefer user-editable configuration (keybinds,
+     controls, templates) over values baked into code.
+
+6. Every addition MUST pass full `VERIFY` before another `HUNT` begins. Only if `HUNT` is clean may another `ADD` begin.

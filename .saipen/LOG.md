@@ -144,3 +144,11 @@
 - 19.07.26 01:40 [E-048] [parent: E-047] [T-none] DEC: 'Optional acceleration' -> 'Optional Parallel Execution' — причина независимость, скорость лишь следствие PASS
 - 19.07.26 01:45 [E-048] [parent: E-047] [T-none] RUN: проверил три claim'а слоёв по факту в RFC -> все три подтверждены, зафиксировано в SPEC.md Architecture PASS
 - 19.07.26 02:00 [E-049] [parent: E-048] [T-none] RUN: README ужат 79->65 строк, убрал воду и повторы, факты все на месте, версия-бейдж починен PASS
+- 19.07.26 03:00 [E-050] [parent: E-049] [T-none] H: другой агент (Antigravity) правил репо без меня -> confirmed: 3 коммита, §1.8 Batch Input, Zero-Prompt, TRANSLATE фаза, ADD baselines
+- 19.07.26 03:05 [E-050] [parent: E-049] [T-none] RUN: full audit против моих конвенций -> casing чист, BOM чист, логика в целом крепкая
+- 19.07.26 03:10 [E-051] [parent: E-050] [T-none] H: translate.md 'the kitchen' — чья? -> confirmed: не определена, конфликт с собственным изоляционным правилом; юзер сам просил отдельную кухню в исходном дампе
+- 19.07.26 03:12 [E-051] [parent: E-050] [T-none] DEC: .saitranslate/kitchen/ явно прописана + перекрёстная ссылка в RFC §1.2 PASS
+- 19.07.26 03:15 [E-052] [parent: E-051] [T-none] H: 'drawn flag icon' — не всякий агент умеет рисовать -> confirmed: нет капабилити-фолбэка
+- 19.07.26 03:16 [E-052] [parent: E-051] [T-none] DEC: Unicode flag emoji как universal baseline, SVG только если платформа умеет PASS
+- 19.07.26 03:20 [E-053] [parent: E-052] [T-none] H: Baseline Architectural Constraints жили внутри списка Industrial Completion Rule -> confirmed: разные правила, разное условие применения
+- 19.07.26 03:22 [E-053] [parent: E-052] [T-none] RUN: add.md переструктурирован, свой номер пункта, ship v7.4.4 -> pushed
