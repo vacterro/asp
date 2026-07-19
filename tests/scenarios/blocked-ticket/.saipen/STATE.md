@@ -1,4 +1,4 @@
---
+---
 phase: VERIFY
 task: T-001
 next_action: check verify

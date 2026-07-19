@@ -23,4 +23,8 @@ Deep repository scrub. Execute strictly in order.
    - Ensure the repository is up to date with correct paths.
    - Confirm project dependencies are clean and aligned.
 
-After cleanup is complete, `RUN: clean -> done`, log the cleanup actions, and transition phase back to `DONE`.
+After cleanup is complete, LOG one normal Event Graph line per RFC § 1.2 --
+`- DATE [E-###] [parent: E-###] RUN: clean -> done @SHORT-HASH` -- never an
+ad-hoc marker like `[E-CLEAN]`. `E-###` continues the same numbered
+sequence as every other entry; CLEAN gets no special ID format. Transition
+phase back to `DONE`.

@@ -124,7 +124,7 @@
 - [E-036] [parent: E-035] [T-063] RUN: FastPrompter cleanup: backed up and removed localized phases/protocol files.
 - [E-037] [parent: E-036] [T-065] RUN: implement .saipen/kitchen/ as canonical intermediate storage for seamless continuation.
 
-[2026-07-18T22:57:13Z] [E-CLEAN] SYSTEM: executed saipen clean. Scrubbed BOARD.md.
+- 18.07.26 22:57 [E-115] [parent: E-037] SYSTEM: executed saipen clean, scrubbed BOARD.md
 - 18.07.26 23:15 [E-038] [parent: E-037] [T-none] RUN: RFC §2.3 refine -> user workflow (было functional cluster) + Complete-before-you-extend maxim, sync RFC+add.md PASS — kurat, два места сразу, одно забудешь — опять несоответствие
 - 18.07.26 23:40 [E-039] [parent: E-038] [T-none] RUN: RFC §2.4 GOAL Mode implemented -> ship-автопуш при goal_mode:true, потолок 3 волны/20 тикетов, VERIFY/REVIEW неприкосновенны PASS — как в Antigravity, только с тормозами
 - 18.07.26 23:55 [E-040] [parent: E-039] [T-none] RUN: readmes -> нашёл старый saipen GOAL в гайдах, смыслы слиты (pivot + автозавершение), регистр выровнен под SET PASS — два агента писали одно слово по-разному, вот и приплыли
@@ -159,3 +159,12 @@
 - 19.07.26 03:49 [E-055] [parent: E-054] [T-none] RUN: init.md -> saipen_version PASS, каждый новый проект теперь с правильной схемой
 - 19.07.26 03:52 [E-056] [parent: E-055] [T-none] H: §1.8 'strictly one by one' двусмысленно — можно прочитать как 'пауза после тикета', ломает goal_mode
 - 19.07.26 03:53 [E-056] [parent: E-055] [T-none] RUN: уточнил — это про scope BUILD, не про темп; проверил review.md отдельно, её капа корректна, не трогал; ship v7.4.5 -> pushed
+- 19.07.26 04:10 [E-116] [parent: E-055] [T-none] H: не смотрел CONFORMANCE.md/extensions/tests/ ни разу за сессию -> нашёл целый неисследованный слой
+- 19.07.26 04:12 [E-116] [parent: E-055] [T-none] H: tests/scenarios/blocked-ticket ожидал 'pick next DOING or TODO' ещё 17 июля -> подтверждает мой сегодняшний фикс, спека была верна до реализации
+- 19.07.26 04:15 [E-117] [parent: E-116] [T-none] H: validate.ps1/sh phase whitelist без HUNT/ADD/CLEAN/TRANSLATE -> confirmed, любой validate во время Maintenance ложно фейлится
+- 19.07.26 04:20 [E-118] [parent: E-117] [T-none] RUN: bash validate.sh на реальном LOG.md -> прошёл ложно; grep -c strict regex against 34 dated lines -> 0 совпадений, подтверждено эмпирически
+- 19.07.26 04:22 [E-118] [parent: E-117] [T-none] DEC: bash 'grep -q любая строка' маскировал провал 124 старыми недатированными строками из битого импорта — kurat, тест хвалил себя за чужую работу
+- 19.07.26 04:25 [E-119] [parent: E-118] [T-none] RUN: powershell validate.ps1 живой прогон -> честно упал на [E-CLEAN], причина найдена: clean.md никогда не задавал точный формат лога
+- 19.07.26 04:28 [E-119] [parent: E-118] [T-none] RUN: set -e ловушка на пустом grep -v -> исправлена; regex обоих валидаторов чинен, phase whitelist дополнен
+- 19.07.26 04:30 [E-120] [parent: E-119] [T-none] RUN: clean.md ужесточён, [E-CLEAN] переформатирован в [E-115] без потери смысла PASS
+- 19.07.26 04:32 [E-120] [parent: E-119] [T-none] RUN: оба валидатора эмпирически прошли по-настоящему -> bash EXIT 0, powershell EXIT 0, ship v7.4.6 -> pushed

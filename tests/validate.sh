@@ -15,7 +15,7 @@ if [ ! -f ".saipen/STATE.md" ]; then
     echo -e "${RED}FAIL: STATE.md missing${NC}"
     exit 1
 fi
-grep -qE "phase:[[:space:]]+(INIT|PLAN|SCOUT|BUILD|VERIFY|REVIEW|SHIP|DONE|BLOCKED|VALIDATE)" .saipen/STATE.md || { echo -e "${RED}FAIL: STATE.md missing valid phase${NC}"; exit 1; }
+grep -qE "phase:[[:space:]]+(INIT|PLAN|SCOUT|BUILD|VERIFY|REVIEW|SHIP|DONE|BLOCKED|VALIDATE|HUNT|ADD|CLEAN|TRANSLATE)" .saipen/STATE.md || { echo -e "${RED}FAIL: STATE.md missing valid phase${NC}"; exit 1; }
 grep -q "task:" .saipen/STATE.md || { echo -e "${RED}FAIL: STATE.md missing task${NC}"; exit 1; }
 grep -q "next_action:" .saipen/STATE.md || { echo -e "${RED}FAIL: STATE.md missing next_action${NC}"; exit 1; }
 grep -q "blocker:" .saipen/STATE.md || { echo -e "${RED}FAIL: STATE.md missing blocker${NC}"; exit 1; }
@@ -30,15 +30,16 @@ if [ ! -f ".saipen/BOARD.md" ]; then
 fi
 echo -e "${GREEN}PASS: BOARD.md exists (acyclic check requires powershell/python wrapper currently)${NC}"
 
-# 3. Check LOG.md
+# 3. Check LOG.md -- every non-empty, non-comment line MUST match (date
+# prefix is optional to allow pre-STYLE.md history; new entries carry one).
 if [ -f ".saipen/LOG.md" ]; then
-    grep -vE "^#" .saipen/LOG.md | grep -vE "^$" | grep -qE "^-[[:space:]]+\[E-[0-9]+\]([[:space:]]+\[parent:[[:space:]]+E-[0-9]+\])?" || {
-        BAD_LINES=$(grep -vE "^#" .saipen/LOG.md | grep -vE "^$" | grep -vE "^-[[:space:]]+\[E-[0-9]+\]([[:space:]]+\[parent:[[:space:]]+E-[0-9]+\])?")
-        if [ -n "$BAD_LINES" ]; then
-            echo -e "${RED}FAIL: LOG.md entry violates Graph Event format${NC}"
-            exit 1
-        fi
-    }
+    LOG_PATTERN="^-[[:space:]]+([0-9]{2}[.\/][0-9]{2}[.\/][0-9]{2}[[:space:]]+[0-9]{2}:[0-9]{2}[[:space:]]+)?\[E-[0-9]+\]([[:space:]]+\[parent:[[:space:]]+E-[0-9]+\])?"
+    BAD_LINES=$(grep -vE "^#" .saipen/LOG.md | grep -vE "^$" | grep -vE "$LOG_PATTERN" || true)
+    if [ -n "$BAD_LINES" ]; then
+        echo -e "${RED}FAIL: LOG.md entry violates Graph Event format:${NC}"
+        echo "$BAD_LINES"
+        exit 1
+    fi
     echo -e "${GREEN}PASS: LOG.md format valid${NC}"
 fi
 
