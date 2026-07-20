@@ -29,5 +29,8 @@ Deep, isolated translation preparation system. This phase runs in a strictly qua
      [parent: E-###] RUN: translate -> done @SHORT-HASH` (this exact text
      after the taxonomy, not a free-text summary) -- then transition the
      phase back to `DONE`.
-   - The bundle sits safely in `.saitranslate/kitchen/` until a future `ADD`
-     phase formally integrates it into the software.
+   - TRANSLATE completion does NOT integrate the bundle into the main
+     software -- the bundle sits safely in `.saitranslate/kitchen/` until
+     a future `ADD`/`PLAN` ticket formally integrates it, through the
+     normal `VERIFY`/`REVIEW`/`SHIP` gates like any other change, never as
+     a side effect of TRANSLATE itself.
