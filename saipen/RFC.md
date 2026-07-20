@@ -11,7 +11,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### 1.2 File Model
 - **STATE.md**: MUST contain frontmatter: `phase`, `task`, `next_action`, `blocker`, `agent`, `updated`. `next_action` MUST be an immediately executable command. MAY contain `goal_mode: true|false` (default `false`) — see § 2.4.
-- **BOARD.md**: MUST track `status` (TODO/DOING/DONE), `needs:` (dependencies), and `owner` (claims).
+- **BOARD.md**: MUST track ticket status via section headings `## DOING` / `## TODO` / `## DONE` / `## BLOCKED`, plus `needs:` (dependencies) and `owner` (claims) per ticket. `## BLOCKED` holds ticket-level blocks only (§ VERIFY debug cap: facts + dead ends noted on the ticket) — distinct from session-level `STATE.phase: BLOCKED` (§ 1.6, `phases/blocked.md`), which is reserved for when no ticket anywhere on the board is workable. The Pick Rule (§ 1.6) only ever selects from `## TODO`, so a `## BLOCKED` ticket is automatically excluded without extra filtering logic.
 - **LOG.md**: Append-only event graph. Every line MUST follow this exact
   shape, in this order: `- DATE [E-###] [parent: E-###] [T-###] TAXONOMY: text`.
   - `DATE` MUST be human-readable `DD.MM.YY HH:mm` (not ISO-8601 -- that
@@ -69,6 +69,11 @@ The protocol lives in the SAIPEN home; the project holds work, not protocol copi
 
 ### 1.8 Batch Input Parsing (The "No Rush" Rule)
 If the user provides a raw list or backlog of multiple features, tasks, or bug reports, the agent MUST NOT attempt to implement them all in a single pass. The agent MUST parse the list into individual `TODO` tickets on `BOARD.md` and execute them surgically, strictly one by one. "One by one" governs BUILD scope -- one ticket's changes per edit pass, never several tickets' code mixed into one -- not cadence. It does NOT mean pausing between tickets: under `goal_mode` (§ 2.4) tickets still flow without stopping; outside `goal_mode`, the normal per-ticket checkpoint (§ 1.5) still applies exactly as always.
+
+### 1.9 Extension Discovery
+- `extensions/<name>/` at the project root is an optional, project-attached phase hook (e.g. `security`, `performance`). Each extension's own `README.md` states which phase it attaches to and what it requires there.
+- On entering a phase, the agent MUST check whether `extensions/<name>/` exists for that phase before proceeding. If it exists, its README's instructions apply for that phase. If it is absent, the phase proceeds exactly as its `phases/*.md` doc describes, with zero extension overhead. Absence MUST NOT block a phase transition -- extensions layer on top of Core, they never gate it.
+- `extensions/schemas/` is a distinct, non-behavioral case: descriptive JSON Schemas held for a future external validator, explicitly not read by any agent today (see `extensions/schemas/README.md`). It is not a phase hook and this section does not apply to it.
 
 ---
 

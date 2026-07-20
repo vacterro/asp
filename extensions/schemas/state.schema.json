@@ -1,11 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "VAC STATE Schema",
+  "title": "SAIPEN STATE Schema",
   "type": "object",
   "properties": {
     "phase": {
       "type": "string",
-      "enum": ["PLAN", "SCOUT", "BUILD", "VERIFY", "REVIEW", "SHIP", "DONE", "BLOCKED"]
+      "enum": ["INIT", "PLAN", "SCOUT", "BUILD", "VERIFY", "REVIEW", "SHIP", "DONE", "BLOCKED", "VALIDATE", "HUNT", "ADD", "CLEAN", "TRANSLATE"]
     },
     "task": {
       "type": "string"
@@ -32,6 +32,10 @@
     "mode": {
       "type": "string",
       "enum": ["full", "read-only", "no-publish", "manual-verify"]
+    },
+    "goal_mode": {
+      "type": "boolean",
+      "default": false
     },
     "updated": {
       "type": "string",

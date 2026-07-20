@@ -1,13 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "VAC BOARD Schema",
+  "title": "SAIPEN BOARD Schema",
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
       "status": {
         "type": "string",
-        "enum": ["TODO", "DOING", "DONE"]
+        "enum": ["TODO", "DOING", "DONE", "BLOCKED"],
+        "description": "BLOCKED = ticket-level block (RFC § 1.2/VERIFY debug cap), distinct from session-level STATE.phase: BLOCKED"
       },
       "id": {
         "type": "string"
@@ -21,6 +22,10 @@
       },
       "verify": {
         "type": "string"
+      },
+      "blocker": {
+        "type": "string",
+        "description": "Facts + dead ends, set when status is BLOCKED"
       },
       "needs": {
         "type": "array",

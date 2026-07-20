@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "VAC LOG Schema",
+  "title": "SAIPEN LOG Schema",
   "type": "array",
   "items": {
     "type": "object",

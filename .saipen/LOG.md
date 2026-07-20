@@ -193,3 +193,21 @@
 - 20.07.26 07:15 [E-138] [parent: E-137] [T-none] RUN: inject.ps1 два раза подряд -> run1 'block refreshed', run2 'already' везде -- 本当に idempotent (по-настоящему), не на словах
 - 20.07.26 07:20 [E-139] [parent: E-138] [T-none] RUN: bash -n inject.sh syntax OK; inject.sh два раза подряд -> та же картина, run2 чисто 'already'
 - 20.07.26 07:25 [E-140] [parent: E-139] [T-none] RUN: ship v7.5.2 -> injector idempotency fix, pushed
+- 20.07.26 07:35 [E-141] [parent: E-140] [T-none] H: user велел продолжать, реально закрывать дыры -> взял CONFORMANCE.md/extensions/security-performance первыми, как сам и предлагал
+- 20.07.26 07:38 [E-142] [parent: E-141] [T-none] H: CONFORMANCE.md 'MUST conform to extensions/schemas/', а schemas/README.md сам 'frozen, никто не читает' -> протокол противоречит сам себе, confirmed
+- 20.07.26 07:40 [E-143] [parent: E-142] [T-none] H: extensions/security/ и extensions/performance/ 'MUST read this directory' при VERIFY/REVIEW -> grep по всему saipen/ ноль ссылок, мёртвый хук, kurat
+- 20.07.26 07:45 [E-144] [parent: E-143] [T-none] DEC: RFC получает новый § 1.9 Extension Discovery -- структурное правило живёт в RFC (always-loaded), не в phase-доке, та же логика что и с LOG-скелетом ранее
+- 20.07.26 07:48 [E-145] [parent: E-144] [T-none] RUN: verify.md/review.md по одной строке на extensions/security и extensions/performance -> hook теперь discoverable
+- 20.07.26 07:52 [E-146] [parent: E-145] [T-none] H: 'mark THIS ticket blocked on BOARD.md' в verify.md -- механизм никогда не был решён, TODO/DOING/DONE и всё
+- 20.07.26 07:55 [E-147] [parent: E-146] [T-none] H: init.md говорит BOARD.md это heading-секции (## DOING/TODO/DONE), не inline status: поле -- board.schema.json описывает вымышленный JSON-формат, живая спека другая
+- 20.07.26 07:58 [E-148] [parent: E-147] [T-none] DEC: 4-й раздел ## BLOCKED проще аннотации -- Pick Rule и так берёт только из ## TODO, фильтровать нечего, sama kui STATE.phase enum уже имеет BLOCKED
+- 20.07.26 08:02 [E-149] [parent: E-148] [T-none] RUN: RFC § 1.2 BOARD.md строка, templates/BOARD.md, .saipen/BOARD.md, init.md skeleton -> все с ## BLOCKED PASS
+- 20.07.26 08:05 [E-150] [parent: E-149] [T-none] H: 3 tests/scenarios/*/.saipen/BOARD.md (blocked-ticket, stale-state, multi-agent-claim) -- голые чекбоксы без заголовков вообще, не матчат канон
+- 20.07.26 08:08 [E-150] [parent: E-149] [T-none] RUN: все 3 fixture переписаны с ## DOING/TODO/DONE/BLOCKED -> PASS
+- 20.07.26 08:12 [E-151] [parent: E-150] [T-none] RUN: 3 schema.json -- title VAC->SAIPEN, phase enum дополнен, goal_mode добавлен, board status +BLOCKED +blocker -> node JSON.parse все 3 PASS
+- 20.07.26 08:15 [E-152] [parent: E-151] [T-none] H: GUIDE.md/EN/RU -- проверил на LOG/BOARD примеры, чисто, ложная тревога из старого списка
+- 20.07.26 08:18 [E-153] [parent: E-152] [T-none] H: 7 scenario README + 005-add-evolution.md прочитаны все -> ни один не устарел, blocked-ticket даже сам предсказывал 'mark ticket BLOCKED'
+- 20.07.26 08:20 [E-154] [parent: E-153] [T-none] RUN: repo-wide grep PROTOCOL.md/VAC-title -> живых следов ноль, только LOG/CHANGELOG история, не трогаю
+- 20.07.26 08:22 [E-154] [parent: E-153] [T-none] RUN: non-ascii sweep всех тронутых файлов -> только § (c2 a7) и правильные em-dash/arrow, mojibake ноль
+- 20.07.26 08:25 [E-155] [parent: E-154] [T-none] RUN: bash + powershell validate -> оба PASS после каждой правки
+- 20.07.26 08:28 [E-156] [parent: E-155] [T-none] RUN: ship v7.6.0 -> Extension Discovery (§1.9) + BOARD BLOCKED mechanism + CONFORMANCE/schemas sync, pushed
