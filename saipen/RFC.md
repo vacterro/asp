@@ -75,6 +75,18 @@ If the user provides a raw list or backlog of multiple features, tasks, or bug r
 - On entering a phase, the agent MUST check whether `extensions/<name>/` exists for that phase before proceeding. If it exists, its README's instructions apply for that phase. If it is absent, the phase proceeds exactly as its `phases/*.md` doc describes, with zero extension overhead. Absence MUST NOT block a phase transition -- extensions layer on top of Core, they never gate it.
 - `extensions/schemas/` is a distinct, non-behavioral case: descriptive JSON Schemas held for a future external validator, explicitly not read by any agent today (see `extensions/schemas/README.md`). It is not a phase hook and this section does not apply to it.
 
+### 1.10 Command Surface
+The complete set of recognized user-facing commands. Phase-affecting ones are defined in full where cited; `status` and `stop` are defined here because they are meta/control operations, not phase transitions -- they can be invoked from any phase and MUST NOT be treated as work themselves.
+- `saipen set` / `saipen init` -- bootstrap `.saipen/` (§ 1.7, `phases/init.md`).
+- `saipen continue` / bare `saipen` -- read `STATE.md`/`BOARD.md`/tail of `LOG.md`, execute `next_action` immediately, no rebriefing (§ 1.1, `CONFORMANCE.md` TEST-001).
+- `saipen goal <text>` -- pivot to a new objective, run to completion (§ 2.4).
+- `saipen clean` -- deep repository scrub (`phases/clean.md`).
+- `saipen translate` -- isolated translation build (`phases/translate.md`).
+- `saipen status` -- MUST read `BOARD.md` and `STATE.md` and report current phase, the in-flight ticket, and what's queued next. MUST NOT write to any file or perform any work -- read-only, no exceptions, regardless of `goal_mode`.
+- `saipen stop` -- MUST checkpoint immediately per § 1.5 (flush `LOG.md`, update `BOARD.md`, set an explicit resumable `next_action`), then halt and return control to the user. MUST NOT leave a ticket mid-edit. Overrides `goal_mode` -- it is the user's manual brake and always wins.
+
+Any command not listed here that appears in a `phases/*.md` doc without a matching definition in this section is non-conformant; add it here before relying on it.
+
 ---
 
 ## Part 2: MAINTENANCE (Autonomous Evolution)

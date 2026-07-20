@@ -224,3 +224,9 @@
 - 20.07.26 09:03 [E-167] [parent: E-166] [T-none] RUN: repo-wide grep стухших v7.x бейджей и 'canonical schema' -> чисто, только свежий фикс остался
 - 20.07.26 09:06 [E-168] [parent: E-167] [T-none] RUN: bash + powershell validate -> оба PASS
 - 20.07.26 09:10 [E-169] [parent: E-168] [T-none] RUN: ship v7.6.1 -> phantom command fix + doc drift sweep (validate.md/clean.md/SPEC.md/README.md), pushed
+- 20.07.26 09:15 [E-170] [parent: E-169] [T-none] H: grep всех 'saipen <word>' команд по живой спеке + GUIDE -- нашёл ту же болезнь что и с fix, только хуже: status и stop
+- 20.07.26 09:18 [E-171] [parent: E-170] [T-none] H: GUIDE.md таблица команд обещает status (read-only отчёт) и stop (checkpoint + отдать управление) -- ни строчки в RFC.md или phases/*.md, kurat, два из шести на главной таблице
+- 20.07.26 09:22 [E-172] [parent: E-171] [T-none] DEC: не просто починить эти два -- добавить RFC § 1.10 Command Surface как реестр, чтоб призрачные команды больше не пролезали молча
+- 20.07.26 09:28 [E-173] [parent: E-172] [T-none] RUN: § 1.10 -> status/stop нормативно определены (MUST read-only, MUST checkpoint+halt, stop переигрывает goal_mode), остальные команды cross-ref на существующие секции
+- 20.07.26 09:30 [E-174] [parent: E-173] [T-none] RUN: bash + powershell validate -> оба PASS; non-ascii sweep RFC.md -> только § (c2 a7), чисто
+- 20.07.26 09:33 [E-175] [parent: E-174] [T-none] RUN: ship v7.7.0 -> RFC § 1.10 Command Surface (status/stop formalized), pushed

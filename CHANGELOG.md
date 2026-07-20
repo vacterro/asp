@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.7.0 -- 2026-07-20
+- feat: found the same phantom-command bug class as the `saipen fix` fix, except worse -- `saipen status` and `saipen stop` are two of the six commands in GUIDE.md/GUIDE_EN.md/GUIDE_RU.md's primary user-facing command table, each with clear, specific promised behavior ("read-only report", "checkpoint and hand control back"), and neither has ever had a single line of backing definition in RFC.md or any `phases/*.md`. An agent reading only the actual protocol tree (not GUIDE.md, which it has no obligation to load) would have nothing to go on if a user typed either.
+- feat: new RFC.md § 1.10 Command Surface. Formalizes `status` (read-only, MUST NOT write or perform work, even under `goal_mode`) and `stop` (immediate § 1.5 checkpoint, then halt -- overrides `goal_mode`, the user's manual brake always wins) as normative MUST behavior matching what GUIDE.md already promised. Also lists every other recognized command with a cross-reference to where it's actually defined, turning this into a registry -- closes the whole bug class, not just these two instances, since any future `phases/*.md` doc inventing an undefined command now has an explicit place it should have been declared and wasn't.
+- Verified: both validators still pass, RFC.md non-ASCII sweep confirmed clean (only legitimate UTF-8 `§`, no mojibake), no BOM.
+
 ## 7.6.1 -- 2026-07-20
 - fix: `phases/done.md` item 3 told agents to run `saipen fix SYMPTOM` -- a command that doesn't exist anywhere else in the protocol. Not in RFC.md, not in GUIDE.md's command table, not in SKILL.md. The correct entry point per RFC § 2.4 is bare `saipen <text>`; done.md now says that instead of a phantom subcommand.
 - fix: `phases/validate.md`'s own summary of the "three conformance vectors" had drifted from `CONFORMANCE.md`'s wording (itself just fixed in v7.6.0) and used the ambiguous word "schema" again -- exactly the term v7.6.0 had to disambiguate. Also neither doc previously listed `KNOWLEDGE/` as part of Repo Validation despite both validators actually checking it as a fourth vector. Both docs now say the same thing, matching what the scripts do.
