@@ -1,7 +1,7 @@
 ---
 phase: DONE
-task: T-101
-next_action: "PHASE_DOCS_FIX_DIRECTIVE_PART2.md T-101 done -- README badge was already current (action item 1 pre-satisfied), added an explicit pre-push version-consistency checklist to ship.md (badge/CHANGELOG head/tag must all match, new step 3). No CHANGELOG entry yet -- deferred to T-114's single consolidated entry per the directive's own structure. Local commit only, no tag/push (Prime Rule 7). Awaiting operator 'Execute T-102 only.'"
+task: T-102
+next_action: "PHASE_DOCS_FIX_DIRECTIVE_PART2.md T-102 done -- RFC § 1.2 gained the general clarification (LOG exactly X means the TAXONOMY:text portion only, full skeleton always applies), ship.md's two LOG lines reworded to match hunt/translate/clean.md's already-explicit pattern. All 5 exact formats the ticket protects verified untouched; negative test confirms a bare taxonomy-only line already fails validate.sh. Local commit only, no tag/push (Prime Rule 7). Awaiting operator 'Execute T-103 only.'"
 blocker: none
 saipen_version: 7
 schema_version: 1
@@ -11,5 +11,5 @@ requires:
   - git
 mode: full
 goal_mode: false
-updated: 2026-07-20T23:58:00Z
+updated: 2026-07-21T00:05:00Z
 ---

@@ -24,9 +24,13 @@ unopted project. Needs 100% green.
    -- ALWAYS, even under `goal_mode`. New public artifact is a one-way door.
    `next_action: WAIT: confirm repo name '<name>' and public/private before
    I push` (RFC § 1.2).
-8. LOG: `RUN: ship vX.Y.Z -> pushed HASH`.
+8. LOG one normal Event Graph line per RFC § 1.2 -- `- DATE [E-###]
+   [parent: E-###] RUN: ship vX.Y.Z -> pushed HASH` (this exact text after
+   the taxonomy).
 9. Push rejected or fails (auth, network, non-fast-forward, hook failure):
-   LOG `RUN: ship vX.Y.Z -> push FAILED <reason>` -- never claim success on
+   LOG one normal Event Graph line per RFC § 1.2 -- `- DATE [E-###]
+   [parent: E-###] RUN: ship vX.Y.Z -> push FAILED <reason>` (this exact
+   text after the taxonomy) -- never claim success on
    a failed push. Commit/tag stay local. Transient (network/auth)? Retry
    once. Still failing, or non-transient (diverged history, rejected)?
    `STATE.phase: BLOCKED` -- pushing is the one SHIP step an agent must not
