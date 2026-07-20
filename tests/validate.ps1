@@ -87,6 +87,22 @@ $dupeIds = @($idCounts.GetEnumerator() | Where-Object { $_.Value -gt 1 } | ForEa
 Assert-Format ($dupeIds.Count -eq 0) "BOARD.md has duplicate ticket ID(s): $($dupeIds -join ', ') -- a status change must move the line (cut+paste), never copy it"
 Write-Host "PASS: BOARD.md no duplicate tickets" -ForegroundColor Green
 
+# 2c. Check BOARD.md for dangling needs: references -- worse than a cycle:
+# a needs: pointing at a T-### that doesn't exist anywhere on the board
+# leaves the Pick Rule permanently unsatisfiable with zero diagnostic signal.
+$allTicketIds = @{}
+foreach ($id in $idCounts.Keys) { $allTicketIds[$id] = $true }
+$danglingRefs = @()
+foreach ($entry in $deps.GetEnumerator()) {
+    foreach ($needed in $entry.Value) {
+        if ($needed -ne "" -and -not $allTicketIds.ContainsKey($needed)) {
+            $danglingRefs += "$($entry.Key)->$needed"
+        }
+    }
+}
+Assert-Format ($danglingRefs.Count -eq 0) "BOARD.md has dangling needs: reference(s): $($danglingRefs -join ', ') -- referenced ticket doesn't exist anywhere on the board"
+Write-Host "PASS: BOARD.md no dangling needs: references" -ForegroundColor Green
+
 # 3. Check LOG.md -- date prefix is optional (pre-STYLE.md history has none,
 # current entries carry one), everything else is mandatory.
 $logLines = Get-Content ".saipen\LOG.md"

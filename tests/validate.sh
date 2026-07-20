@@ -48,6 +48,21 @@ if [ -n "$DUPE_IDS" ]; then
 fi
 echo -e "${GREEN}PASS: BOARD.md no duplicate tickets${NC}"
 
+# 2c. Check BOARD.md for dangling needs: references -- worse than a cycle:
+# a needs: pointing at a T-### that doesn't exist anywhere on the board
+# leaves the Pick Rule permanently unsatisfiable with zero diagnostic signal.
+ALL_IDS=$(grep -oE '\- \[[ x/]\] T-[0-9]+' .saipen/BOARD.md | grep -oE 'T-[0-9]+' | sort -u)
+NEEDS_REFS=$(grep -oE 'needs:[^|]*' .saipen/BOARD.md | sed 's/needs://' | tr ',' '\n' | grep -oE 'T-[0-9]+' | sort -u)
+DANGLING=""
+for ref in $NEEDS_REFS; do
+    echo "$ALL_IDS" | grep -qx "$ref" || DANGLING="$DANGLING $ref"
+done
+if [ -n "$DANGLING" ]; then
+    echo -e "${RED}FAIL: BOARD.md has dangling needs: reference(s):$DANGLING -- referenced ticket doesn't exist anywhere on the board${NC}"
+    exit 1
+fi
+echo -e "${GREEN}PASS: BOARD.md no dangling needs: references${NC}"
+
 # 3. Check LOG.md -- every non-empty, non-comment line MUST match (date
 # prefix is optional to allow pre-STYLE.md history; new entries carry one).
 if [ -f ".saipen/LOG.md" ]; then

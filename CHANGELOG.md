@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.11.1 -- 2026-07-20 -- re-audit found one more real gap
+- feat (found on a genuine re-check against the original audit text, not against my own prior summary of it): a dangling `needs:` reference -- a ticket declaring `needs: T-999` where `T-999` doesn't exist anywhere on the board -- was completely undetected. Worse than a cycle: the existing cycle-detector only tracks cycles among tickets that themselves declare `needs:`, so a reference to a ticket that was simply never real gets silently treated as a dependency-free leaf. The Pick Rule becomes permanently unsatisfiable for that ticket with zero diagnostic signal anywhere -- no error, no cycle, nothing, just a ticket that never gets picked, forever.
+- RFC § 1.2 now covers it explicitly, same remedy as cycles: move the ticket to `## BLOCKED` with `| blocker: needs nonexistent T-###`, log a `DEC`, keep working other tickets. Both validators detect it now -- verified empirically: a fixture where one ticket needs a real sibling and another needs a ghost ticket correctly flags only the ghost reference, not the real one. `CONFORMANCE.md`'s Session Validation vector tightened to name this explicitly instead of just "acyclic", which doesn't by itself imply references resolve.
+- Full regression sweep across every existing scenario fixture confirmed zero new failures from this addition.
+
 ## 7.11.0 -- 2026-07-20 -- closing every open item from the audit triage
 - feat: `.saipen/` root location stated once, explicitly, in § 1.1 -- individual mentions elsewhere in the document may drop the prefix for brevity without it reading as a different location.
 - feat (security baseline, genuinely missing before this): § 1.1 now states agents MUST NOT write secrets (API keys, tokens, passwords, credentials) into `STATE.md`/`BOARD.md`/`LOG.md`/`KNOWLEDGE/` -- these files are meant to be committed and shared across agents. A secret found mid-task gets redacted in whatever gets written, user gets told to rotate it.

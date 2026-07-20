@@ -320,3 +320,10 @@
 - 20.07.26 15:18 [E-263] [parent: E-262] [T-none] RUN: tests/scenarios/extension-absence создан (README-only, по образцу fresh-init)
 - 20.07.26 15:22 [E-264] [parent: E-263] [T-none] RUN: bash + powershell validate -> оба PASS; non-ascii sweep -> только § (c2 a7), чисто
 - 20.07.26 15:25 [E-265] [parent: E-264] [T-none] RUN: ship v7.11.0 -> все пункты триажа закрыты явно, ни один не пропущен молча, pushed
+- 20.07.26 15:35 [E-266] [parent: E-265] [T-none] H: user 'перепроверь' -- прошёл по оригинальному тексту заново, не по своему пересказу
+- 20.07.26 15:40 [E-267] [parent: E-266] [T-none] H: dangling needs: -- ticket needs: T-999, T-999 нигде не существует -- cycle-detector его не ловит вообще, просто трактует как лист без зависимостей
+- 20.07.26 15:42 [E-268] [parent: E-267] [T-none] DEC: хуже цикла -- цикл хотя бы детектится, dangling ref не даёт вообще никакого сигнала, Pick Rule навечно не удовлетворим молча
+- 20.07.26 15:45 [E-269] [parent: E-268] [T-none] RUN: RFC § 1.2 -> dangling needs: тем же remedy что cycle (-> BLOCKED), CONFORMANCE.md § 2 vector уточнён PASS
+- 20.07.26 15:50 [E-270] [parent: E-269] [T-none] RUN: оба валидатора -> detect добавлен, синтетика с T-002 needs T-999 (призрак) + T-001 needs T-003 (реальный) -> только призрак поймался PASS
+- 20.07.26 15:52 [E-271] [parent: E-270] [T-none] RUN: regression sweep всех фикстур -> ноль новых поломок
+- 20.07.26 15:55 [E-272] [parent: E-271] [T-none] RUN: ship v7.11.1 -> dangling needs: закрыт, найден на честном re-check, pushed
