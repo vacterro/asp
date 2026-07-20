@@ -1,7 +1,7 @@
 ---
 phase: DONE
 task: none
-next_action: "v7.19.1 shipped -- GUIDE_EN.md/GUIDE_RU.md wrongly named Cursor as a configured agent (it isn't a real injector target), swapped to Aider; .saipen/KNOWLEDGE/decisions.md gained the goal_exit rejection as a durable entry (was only findable in CHANGELOG/LOG history before). Audit findings are now genuinely thin -- 6 rounds deep this session, this round found only 2 real items across 5 checked areas. No open tickets. Board is empty -- bare `saipen` auto-transitions to HUNT per RFC § 2.1. Next natural milestone per earlier session context: the extended live test, not another audit pass."
+next_action: "v7.20.0 shipped -- new extensions/multi-agent/ (README, lanes.md, multi-agent.md working agreement, prompts/planner+worker+integrator.md), the Coordinator/Server Layer SPEC.md's own Concurrency section has predicted since it was written, now made concrete. Fully additive -- RFC.md/phases/ untouched beyond one clarifying sentence in § 1.9. Came from critically evaluating a user-brought architecture proposal: kept the core (worktree isolation, single ledger writer, evidence packages), rejected a new lane: BOARD.md field (RFC's ticket shape is a closed enum -- lanes.md instead), kept LOG.md granularity via Integrator-reconciles-worker-kitchen-notes rather than Workers going fully silent. No open tickets. Board is empty -- bare `saipen` auto-transitions to HUNT per RFC § 2.1. Real-world use of this extension (e.g. on FastPrompter) still needs that project's own 265 uncommitted files resolved first -- separate, not blocking SAIPEN's own state."
 blocker: none
 saipen_version: 7
 schema_version: 1
@@ -11,5 +11,5 @@ requires:
   - git
 mode: full
 goal_mode: false
-updated: 2026-07-20T22:18:00Z
+updated: 2026-07-20T22:52:00Z
 ---

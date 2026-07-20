@@ -6,7 +6,7 @@
 
 # SAIPEN
 
-**v7.19.1** | [Spec](SPEC.md) | [Guide](GUIDE.md) | plain markdown | zero deps | MIT
+**v7.20.0** | [Spec](SPEC.md) | [Guide](GUIDE.md) | plain markdown | zero deps | MIT
 
 **One command. Zero amnesia.**
 
@@ -38,6 +38,8 @@ Memory lives in the project, not in a model's head. `Project -> Memory -> LLM` b
 **Automated Evolution.** Board empty, type `/saipen`: `HUNT` audits for bugs, dead code, failing tests. Clean? `ADD` builds the next obvious missing capability, verifies it, hunts again. Product's mature -> stops gracefully.
 
 **GOAL Mode.** `/saipen goal <what you want>` pivots the board (old tickets demoted, never deleted) and runs the new objective to completion -- no "shall I continue?" between tickets, VERIFY/REVIEW never skipped. SHIP auto-pushes to an existing remote; a brand-new repo still asks once. Capped at 3 waves / 20 tickets per run, then checkpoints and reports.
+
+**Multi-Agent Coordination.** Running 2+ agents on the same project at once needs an Integrator, not luck -- `extensions/multi-agent/` is a copy-in example: git worktree + branch per ticket, one Integrator as the sole writer of STATE/BOARD/LOG, a merge queue in front of trunk. Opt-in, not Core -- plain SAIPEN alone still handles the single-agent case correctly.
 
 ## Quick Start
 
