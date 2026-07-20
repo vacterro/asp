@@ -1,9 +1,35 @@
-# SAIPEN Gap Matrix (T-000, updated after T-001)
+# SAIPEN Gap Matrix (T-000, updated after T-001, T-003)
 
-Produced per `SAIPEN_SPEC_DIRECTIVE.md` T-000, updated with T-001 findings. Every
-CLOSED row has a grep/validator command and its actual output as evidence, not a
-claim. This is scratch/audit output (kitchen/), not a normative file -- do not
-cite it as spec.
+Produced per `SAIPEN_SPEC_DIRECTIVE.md` T-000, updated with T-001 and T-003
+findings. Every CLOSED row has a grep/validator command and its actual output
+as evidence, not a claim. This is scratch/audit output (kitchen/), not a
+normative file -- do not cite it as spec.
+
+## T-003 status: PARTIAL, not DONE
+
+Implemented: `WAIT: <question>` as a formalized legal `next_action` form
+(RFC § 1.2, scoped to manual-verify/destructive-op/first-publish/user-brake
+gates only), `blocker` MUST be non-empty when `phase: BLOCKED`, `updated`
+MUST be UTC specifically (not just any ISO-8601 offset -- Recovery's
+staleness comparison silently miscompares across timezones otherwise),
+`task` MAY be literal `none`, and a schema-version migration rule (missing
+`schema_version` -> treat as `0` and upgrade; a HIGHER `schema_version`
+than this agent's own RFC copy understands -> degrade to `read-only` or
+`BLOCKED`, never silently rewrite).
+
+Declined, same reasoning as before, no new argument presented this ticket:
+`schema: "7.7"` as a new field -- still redundant with existing
+`saipen_version`/`schema_version`, which the migration rule above now
+actually uses. `goal_anchor: T-### | none` -- still not needed; RFC § 2.4's
+Final Report line already requires distinguishing "user's ask" from
+"picked up along the way" without a persisted field.
+
+NOT implemented, blocking, needs an explicit answer: `goal_exit: objective |
+mature` defaulting to `objective`. This is the same conflict flagged after
+T-000/T-001 -- it would reverse the explicit decision made earlier this
+session via a direct question to the operator (kept `goal_mode` never
+exiting on board-empty, grounded in a real WildRiftAssistant stall trace).
+Asked again, directly, this time -- see chat.
 
 ## T-001 addendum: new items found while building the transition table
 

@@ -347,3 +347,10 @@
 - 20.07.26 17:15 [E-290] [parent: E-289] [T-none] RUN: positive test PLAN->SCOUT в таблице, negative test INIT-строка без SHIP -> оба grep-ом подтверждены PASS
 - 20.07.26 17:18 [E-291] [parent: E-290] [T-none] H: hunt.md сам не говорит куда идти при findings (только clean->ADD explicit) -- вне файлового скоупа T-001, залогировал в GAP_MATRIX, не трогаю
 - 20.07.26 17:20 [E-292] [parent: E-291] [T-none] RUN: GAP_MATRIX обновлён (G-13/14/15); bash + powershell validate -> оба PASS; ship v7.12.0 -> T-001 закрыт, pushed
+- 20.07.26 17:25 [E-293] [parent: E-292] [T-none] H: user 'Execute T-003 only' -- T-003 сам содержит goal_exit: objective (default) -- та же коллизия что T-007, теперь ВНУТРИ этого тикета
+- 20.07.26 17:28 [E-294] [parent: E-293] [T-none] DEC: не пропускаю молча второй раз -- разделяю тикет: делаю независимые части, goal_exit/goal_anchor откладываю с прямым вопросом
+- 20.07.26 17:32 [E-295] [parent: E-294] [T-none] RUN: RFC § 1.2 -> WAIT: синтаксис формализован (только 4 legal триггера), blocker non-empty при BLOCKED, updated UTC-only, schema_version migration (используя существующие поля, не новый schema:) PASS
+- 20.07.26 17:35 [E-296] [parent: E-295] [T-none] RUN: CONFORMANCE.md TEST-001 -> уточнено что WAIT: не нарушает 'never ask what should I do' PASS
+- 20.07.26 17:38 [E-297] [parent: E-296] [T-none] RUN: проверил свой же .saipen/STATE.md updated: -- уже Z-suffix, уже конформно PASS
+- 20.07.26 17:40 [E-298] [parent: E-297] [T-none] RUN: GAP_MATRIX -> T-003 PARTIAL, goal_anchor/schema: отклонены повторно без нового аргумента, goal_exit явно вынесен наружу
+- 20.07.26 17:42 [E-299] [parent: E-298] [T-none] RUN: bash + powershell validate -> оба PASS; ship v7.13.0 -> T-003 частично (WAIT:/blocker/UTC/migration), goal_exit не тронут, pushed

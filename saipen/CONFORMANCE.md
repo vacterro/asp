@@ -10,4 +10,4 @@ Any release of this protocol MUST pass the gold standard test:
 1. Cold agent (zero chat history).
 2. Execute `saipen continue` (or equivalent bootstrap command).
 3. Agent MUST: read `next_action` and execute it instantly WITHOUT asking for context.
-If the agent asks "What should I do?", the protocol has failed.
+If the agent asks "What should I do?", the protocol has failed. A `next_action: WAIT: <specific question>` (RFC.md § 1.2) does NOT fail this test -- asking one exact, pre-determined question instantly is the executable action; the failure mode is vague context-seeking, not a specific authorization gate.
