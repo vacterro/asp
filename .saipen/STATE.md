@@ -1,7 +1,7 @@
 ---
 phase: DONE
-task: T-105
-next_action: "PHASE_DOCS_FIX_DIRECTIVE_PART2.md T-105 done -- found a real bug, not just wording, in add.md's evaluation pseudocode: the minimal_delta/design_language IF had no ELSE, so an existing-but-non-minimal opportunity silently fell through the loop to RETURN DONE, falsely declaring the product mature even though step 3's own prose already assumed a ticket-it-and-PLAN path existed. Added the missing ELSE (ticket + RETURN PLAN_or_SCOUT), spelled out the two implementation paths in prose, clarified bugfix->RETURN HUNT means ADD delegates rather than improvising a fix. Also gave the mature-exit branch its own explicit goal_mode/counter-clearing (RFC § 2.4's Exit rule previously lived only in RFC, never at the point in add.md where it actually needs to happen), separated from the generic per-cycle wave-increment bullet so they don't double-fire. Local commit only, no tag/push (Prime Rule 7). Awaiting operator 'Execute T-106 only.'"
+task: T-106
+next_action: "PHASE_DOCS_FIX_DIRECTIVE_PART2.md T-106 done -- items 1/3/5 (version consistency, LOG skeleton, first-publish WAIT) were already satisfied by T-101/T-102, verified by grep before touching anything. Added item 2 (PUBLISH is the action inside SHIP, not a separate STATE.md phase -- the heading's -> could otherwise be misread the same as a transition-table row). Item 4's ticket wording ('MUST NOT push, prepare local artifacts only') would have contradicted RFC § 1.3, which already blocks entering SHIP entirely under no-publish, not just the push step -- wrote an accurate version instead of the literal proposal. Local commit only, no tag/push (Prime Rule 7). Awaiting operator 'Execute T-107 only.'"
 blocker: none
 saipen_version: 7
 schema_version: 1
@@ -11,5 +11,5 @@ requires:
   - git
 mode: full
 goal_mode: false
-updated: 2026-07-21T00:42:00Z
+updated: 2026-07-21T00:55:00Z
 ---

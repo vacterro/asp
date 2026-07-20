@@ -2,9 +2,18 @@
 
 ## SHIP -> PUBLISH
 
+"PUBLISH" names the action this phase performs (tag + push), not a
+separate `STATE.md phase:` value -- `SHIP` is the only phase here; RFC
+§ 1.6's 14-value enum has no `PUBLISH` entry. The arrow above is
+descriptive, not a transition-table row.
+
 Only on `saipen ship`, or repo has `origin` AND LOG shows prior ship, or
 `goal_mode: true` (RFC § 2.4) with an existing `origin`. Never auto-publish
 unopted project. Needs 100% green.
+
+`mode: no-publish`? This phase is never entered at all -- RFC § 1.3
+blocks the `SHIP` transition itself, not just the push step below, since
+no-publish means git is missing and nearly every step here needs it.
 
 1. README beautiful: pitch, features, install, usage, version + changelog link.
 2. Version bump (micro -> 3.2.1, feature -> 3.2.0, breaking -> major).
