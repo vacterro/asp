@@ -16,6 +16,8 @@ BLOCK="
 ## saipen protocol (global)
 On \"saipen set\" / \"saipen ...\" commands, or when project root contains
 .saipen/: read $SKILL_HOME/RFC.md + $SKILL_HOME/STYLE.md and follow them.
+Chat tone: caveman-ded (STYLE.md) - compressed + blunt, on by default,
+off only on \"stop caveman\"/\"normal mode\".
 Memory: .saipen/ at project root - read .saipen/STATE.md before work;
 checkpoint BOARD + STATE after every ticket, LOG line after every run.
 Path missing (new machine)? clone github.com/vacterro/saipen.
