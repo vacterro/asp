@@ -31,6 +31,13 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
     distinguishes "no ticket" from "forgot the field", and established
     practice already used it; ratified v7.24.0). Any other non-numeric
     value in this position is non-conformant.
+  - `[agent: <id>]` (writer identity, same id convention as `STATE.md
+    agent:`) is MAY, placed after the ticket ref and before the taxonomy.
+    Single-agent sessions SHOULD omit it -- `STATE.md agent:` already says
+    who's working, repeating it per line is noise. It exists for
+    multi-agent sessions (`extensions/multi-agent/`): the Integrator
+    stamps it when folding a Worker's results into `LOG.md`, so the ledger
+    says who did what without a separate lookup.
   - `TAXONOMY` MUST be exactly one of: `RUN` (command executed, result),
     `DEC` (decision made, why), `H` (hypothesis, test, verdict). No other
     label is conformant -- a phase name is not a taxonomy value.

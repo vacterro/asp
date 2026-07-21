@@ -293,11 +293,13 @@ for tid, t in tickets.items():
 log_path = Path(".saipen/LOG.md")
 if log_path.is_file():
     # Date prefix optional to allow pre-STYLE.md history; new entries carry one.
+    # [agent: <id>] is a MAY field for multi-agent sessions (RFC § 1.2, v7.27.0).
     LOG_RE = re.compile(
         r"^- (?:\d{2}[./]\d{2}[./]\d{2} \d{2}:\d{2} )?"
         r"\[E-(\d+)\]"
         r"(?: \[parent: E-(\d+)\])?"
         r"(?: \[(T-[^\]]*)\])?"
+        r"(?: \[agent: [^\]]+\])?"
         r" ([A-Z]+): (.*)$")
     seen_ids = {}
     prev_id = 0
@@ -404,7 +406,7 @@ if Path("saipen/RFC.md").is_file() and Path("VERSION").is_file() and Path("READM
     # B. Every runtime file the protocol references must exist in the home.
     manifest = [
         "saipen/SKILL.md", "saipen/UI.md", "saipen/STYLE.md",
-        "tools/validate.py",
+        "tools/validate.py", "tools/install_hook.py",
         "tests/validate.sh", "tests/validate.ps1",
         "extensions/schemas/state.schema.json",
         "extensions/templates/STATE.md", "extensions/templates/BOARD.md",

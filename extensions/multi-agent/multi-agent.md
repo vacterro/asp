@@ -17,7 +17,9 @@ by the Integrator. No exceptions, no "just this once."
 - MUST NOT modify `.saipen/STATE.md`/`BOARD.md`/`LOG.md`.
 - MUST NOT merge into the trunk branch.
 - MAY write to `.saipen/kitchen/agents/<worker-id>/` for scratch/reasoning
-  the Integrator will fold into real `LOG.md` entries at merge time.
+  the Integrator will fold into real `LOG.md` entries at merge time --
+  stamped `[agent: <worker-id>]` (RFC § 1.2's MAY field), so the ledger
+  says who did what without digging through kitchen dirs.
 - MUST produce an evidence package before stopping (see below) -- a claim
   of "done" with no diff, no verify output, no regression test is not
   done, it's a guess.

@@ -33,6 +33,24 @@ then check for another unblocked `TODO` ticket and work that instead.**
 ticket on the board is workable -- one stuck ticket MUST NOT halt a session
 that still has other work available, under `goal_mode` or otherwise.
 
+**Clean tree before the next ticket.** A blocked ticket MUST NOT leave its
+half-broken edits sitting in the working tree -- the next ticket would
+build on contaminated code and every later verify inherits the mess.
+Before picking the next ticket:
+- Git available: save the failed attempt first -- `git diff >
+  .saipen/kitchen/failed/T-###.patch` -- then revert the failed ticket's
+  uncommitted changes (`git restore <files>`). Nothing is lost: the patch
+  re-applies with `git apply` if the ticket comes back, and it auto-clears
+  under kitchen's stale rule once the ticket is done or pruned. This
+  revert is pre-authorized by this procedure and reversible via the saved
+  patch, satisfying RFC § 1.1's destructive-op rule. Changes already
+  committed mid-attempt stay in history -- note the commit hash in the
+  ticket's `| blocker:` field instead.
+- No git (degraded mode): copy this attempt's edited files to
+  `.saipen/kitchen/failed/T-###/` and state plainly in `| blocker:` that
+  the tree still carries partial changes -- never silently pretend the
+  tree is clean when it isn't.
+
 After VERIFY pass: tick BOARD, next ticket or STATE -> REVIEW.
 `goal_mode: true`? Increment `goal_tickets` by 1 and checkpoint STATE
 (RFC § 2.4). That hits the 3-`goal_waves`/20-`goal_tickets` cap? STOP here
