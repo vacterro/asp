@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.30.1 -- 2026-07-21 -- multi-agent pulled from the storefront until it's field-tested
+- User's call after the honest pre-advertising assessment: the multi-agent extension has zero live runs behind it, so it does not get advertised. README's Multi-Agent Coordination section removed; the `multi-agent` GitHub topic removed. The extension itself stays fully in the repo (`extensions/multi-agent/`), and every normative reference stays intact -- RFC § 1.4's concurrency boundary, § 1.9's extension discovery, SPEC's architecture tree all still point at it, because the protocol's logic needs the pointer regardless of what the storefront says. Advertising returns after a real Planner/Worker/Integrator field run.
+
 ## 7.30.0 -- 2026-07-21 -- second adversarial pass: five holes, two of them self-inflicted last version
 Asked what else the audit could catch, the honest answer included attacking my own v7.28.0 fixes:
 
