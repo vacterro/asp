@@ -66,10 +66,12 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
    Absence MUST fall back silently to sequential execution -- same result.
 
 ### 1.4 Claim & Ownership
-- Agent sets `owner: <AgentID>` and `claim_time: <ISO8601>` on BOARD.
-- Active owner: `claim_time` < 15 minutes old, or actively writing to `LOG.md`.
-- Stale claims: `claim_time` > 15 minutes + no LOG activity → claim is forfeit.
-- Conflicting writes: First successful filesystem commit wins.
+- Claiming a ticket = moving it to `## DOING` with `owner: <AgentID>` and `claim_time: <ISO8601 UTC>` set on its line. When one agent is provably alone on a project (the common single-agent case), the fields are OPTIONAL -- but any agent that even suspects it is not alone MUST set both on every ticket it picks.
+- **Active claim**: `claim_time` less than 15 minutes old. The owner -- or the Integrator acting for it (`extensions/multi-agent/`) -- MUST refresh `claim_time` at every checkpoint (§ 1.5) while holding the ticket. Liveness is decided by reading `BOARD.md` alone; a recent `LOG.md` line stamped `[agent: <owner>]` (§ 1.2) MAY serve as supporting evidence, never as the primary test. (The pre-v7.28.0 "or actively writing to LOG.md" test was undecidable -- a shared file's mtime can't attribute activity to any particular owner -- and contradicted the multi-agent extension outright, whose Workers never write `LOG.md` at all.)
+- **Stale claim**: `claim_time` 15+ minutes old -> forfeit. The next agent MAY take the ticket over: LOG a `DEC` line recording the takeover (old owner, observed staleness), set its own `owner:`/`claim_time`, and inspect `kitchen/` for the predecessor's half-done work (§ 1.2) before redoing anything from scratch.
+- A `## DOING` ticket carrying NO `owner:`/`claim_time` at all is unclaimed by definition (a crashed single-agent session, or pre-claim history): any agent MAY adopt it the same way -- LOG the `DEC`, check `kitchen/`, continue the work.
+- **Conflicting claim writes**: the first write that lands in `BOARD.md` wins. An agent that loses the race MUST re-read `BOARD.md` and pick a different ticket -- never re-assert its claim over the winner's.
+- **Concurrency boundary**: Core's safety model is claim-serialized tickets with ONE agent writing `.saipen/` at any instant. Two-plus agents making uncoordinated concurrent checkpoints is outside Core's envelope -- `E-###` allocation races and last-writer-wins `STATE.md` are exactly why (the validator catches that wreckage after the fact; nothing in Core prevents it up front, by design -- SPEC.md: a state protocol, not a distributed consensus algorithm). Real parallelism needs the Coordinator layer: `extensions/multi-agent/` (one worktree+branch per Worker, one Integrator as the sole `.saipen/` writer). An agent that observes `STATE.md` with `agent:` other than itself and `updated:` fresher than the claim window MUST assume a live concurrent session: work only tickets it claims under this section's rules, and prefer the extension for anything more than that.
 
 ### 1.5 Checkpointing & Recovery
 - **Checkpointing**: MUST checkpoint after every ticket or before session termination. Three separate files cannot be written as one atomic transaction, so order stands in for atomicity: **(1)** append the `LOG.md` event, **(2)** write `BOARD.md` (temp file + rename), **(3)** write `STATE.md` (temp file + rename) *last* -- `STATE.md` is the commit pointer. A crash between any two steps always leaves `STATE.md` truthfully behind `LOG.md`/`BOARD.md`, never ahead of them, which is exactly the condition Recovery below already knows how to fix. Writing `STATE.md` first (or in any other order) can leave it claiming something `BOARD.md` doesn't yet reflect -- a crash Recovery would not reliably catch.
@@ -78,7 +80,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 ### 1.6 Core State Machine & Ticket DAG
 `INIT → PLAN → SCOUT → BUILD → VERIFY → REVIEW → SHIP → DONE | BLOCKED`
 
-- **Ticket DAG**: Tickets MUST define dependencies using `needs: [T-XXX]`. **Pick Rule**: Agents MUST NOT pick a `TODO` ticket unless all its `needs:` are marked `DONE`.
+- **Ticket DAG**: Tickets MUST define dependencies using `needs: [T-XXX]`. **Pick Rule**: Agents MUST NOT pick a `TODO` ticket unless all its `needs:` are marked `DONE`, and MUST NOT pick a ticket under another agent's active claim (§ 1.4) -- the claim rule existed since v1 but the Pick Rule never referenced it, so a rule-following agent could legally grab a freshly-claimed ticket (fixed v7.28.0).
 - **VERIFY**: MUST be executed. Failure retries within VERIFY itself, not a phase transition -- `phases/verify.md`'s own cap (3 dead hypotheses or 2 failed fix cycles) moves the ticket to `## BLOCKED` on `BOARD.md` and the agent picks up other workable tickets instead. Success transitions to `REVIEW`.
 - **MANUAL-VERIFY**: If `mode: manual-verify`, `VERIFY` MUST block and await human confirmation. Agent MUST NOT auto-transition to `REVIEW`.
 - **DONE**: A ticket MUST NOT be marked `DONE` without a successful `VERIFY` (or human `MANUAL-VERIFY`).
@@ -169,6 +171,9 @@ When the Core state machine reaches a halt (no pending tickets), the Maintenance
       IF satisfies(minimal_delta) AND satisfies(existing_design_language):
         IMPLEMENT(priority)
         RETURN VERIFY
+      ELSE:
+        TICKET(priority)
+        RETURN PLAN_or_SCOUT
   
   RETURN DONE
   ```

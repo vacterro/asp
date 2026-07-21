@@ -1,5 +1,17 @@
 # Changelog
 
+## 7.28.0 -- 2026-07-21 -- adversarial logic audit: the multi-agent core actually holds now
+User asked for zero logical holes with the multi-agent amnesia promise as the target. Adversarial pass over RFC.md as a whole -- attacking the rules as written, not the wiring -- found six real holes, all in § 1.4/§ 1.6/§ 2.2:
+
+- **The Pick Rule never referenced claims.** § 1.4 defined owner/claim_time since v1; § 1.6's Pick Rule said only "all needs: DONE" -- a rule-following agent could legally grab a ticket another agent claimed two minutes ago. The claim system existed and nothing consumed it. Pick Rule now excludes tickets under an active claim.
+- **"Active owner: ... or actively writing to LOG.md" was undecidable AND contradicted the extension.** A shared file's mtime can't attribute activity to any particular owner -- and `extensions/multi-agent/`'s Workers never write LOG.md at all, so under the extension the test could never be true for exactly the agents it was supposed to protect. Replaced with a decidable refresh-based rule: active = claim_time under 15 minutes, owner (or Integrator) MUST refresh at every checkpoint; a recent `[agent: <owner>]` LOG line (v7.27.0's field, wired one version later) MAY support, never decide.
+- **No concurrency boundary was ever stated.** Core now says plainly: claim-serialized tickets, ONE agent writing `.saipen/` at any instant; uncoordinated concurrent checkpoints are outside the envelope (E-### races, last-writer-wins STATE -- the validator catches wreckage, nothing prevents it, by design per SPEC); real parallelism = the multi-agent extension. An agent seeing a fresh STATE.md written by someone else MUST assume a live concurrent session and work only claimed tickets. (`.saipen/lock` stays rejected -- this states the boundary, it does not add coordination machinery.)
+- **Zombie DOING tickets had no adoption rule.** A crashed session's `[/]` ticket with no owner fields was formally untouchable -- no rule said a successor may take it. Now: no owner/claim_time = unclaimed by definition; any agent MAY adopt after LOGging a DEC and checking kitchen/ for the predecessor's half-done work. Stale-claim takeover got the same explicit procedure.
+- **"First successful filesystem commit wins" said nothing about the loser.** Now: the losing agent MUST re-read BOARD.md and pick a different ticket, never re-assert over the winner.
+- **RFC § 2.2's ADD pseudocode still had the missing-ELSE bug T-105 fixed in `phases/add.md` (v7.22.0)** -- the phase doc was corrected, RFC's copy of the same pseudocode wasn't, leaving the spec contradicting its own authoritative phase doc for six versions. Synced.
+
+`multi-agent-claim-conflict` fixture re-checked -- consistent with the 15-minute window and refresh semantics. Both validators green, fixture parity 9/9.
+
 ## 7.27.0 -- 2026-07-21 -- the last three proposals land: agent-ID in LOG, clean-tree rollback, pre-commit hook
 User gave a blanket go-ahead on the remaining proposal queue. Each got a real design pass, not a transcription of the original suggestion:
 
