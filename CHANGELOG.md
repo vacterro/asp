@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.35.1 -- 2026-07-23 -- TRANSLATE covers docs AND software together, actively tracks drift
+User's follow-up clarified intent further: v7.34.1's "docs-first projects / UI-bearing projects" wording read as an either/or choice -- pick one. The real intent is additive: TRANSLATE's job is everything translatable in the repo, docs and real software UI strings together whenever both exist, never a choice between them. `phases/translate.md` § 2 reworded -- documentation and real UI strings are now explicitly "(a)" and "(b)", both in scope simultaneously; a project just gets whichever of the two it actually has (most SAIPEN-managed projects: (a) only, never fabricate (b) to compensate).
+
+§ 3 ("Maintenance and Update") was also thin -- "if it already exists, compare" read as a passive, one-time check rather than an ongoing responsibility. Reworded to an active per-run drift scan: every `saipen translate` invocation re-scans both surfaces against the existing bundle, treats anything new or changed since the last run as drift to translate, and explicitly warns against two failure modes -- rebuilding everything from scratch every time (wasteful, loses nothing but resets nothing wrong either) and silently leaving stale translations next to updated source (worse than no translation, since nothing signals they've drifted). Added an explicit coverage-honesty requirement: a partial pass gets reported as partial in the completion LOG line, never rounded up to "done."
+
+Both validators green.
+
 ## 7.35.0 -- 2026-07-23 -- everything protocol-shaped lives under one .saipen/ roof
 User caught a real conformance bug in a different project (`FastPrompter`): another agent had spawned a subSaipen at root-level `subs/`, not `extensions/subs/` -- a deviation from spec. That surfaced the deeper question: why does a project carry `.saipen/`, `extensions/`, and `.saitranslate/` as three separate top-level entries at all? Weighed the tradeoff explicitly before touching anything this foundational (RFC's file model, referenced everywhere): consolidation cuts root-level clutter to one dot-folder; the cost is `.saipen/` (protocol-managed continuation state) absorbing `extensions/` (project-author-managed behavior hooks) into one bucket. Judged worth it -- confirmed with the user given the size of the change.
 

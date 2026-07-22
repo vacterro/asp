@@ -571,5 +571,8 @@
 - 23.07.26 01:20 [E-569] [parent: E-568] [T-none] RUN: RFC §1.2/§1.9/§2.1 -- новая точка крепления .saipen/extensions/<name>/ и .saipen/saitranslate/, legacy root-level recognized as equivalent, никогда не поддерживать оба сразу; ДОМ свой extensions/ НЕ двигаю -- он библиотека, не точка крепления
 - 23.07.26 01:30 [E-570] [parent: E-569] [T-none] RUN: verify.md/review.md/translate.md (5 упоминаний) обновлены; extensions/subs|security|performance/README.md и PROTOCOL.md описывают новую точку крепления; заодно поймал мёртвую ссылку на снесённый extensions/multi-agent/ в subs/README.md, починил
 - 23.07.26 01:40 [E-571] [parent: E-570] [T-none] RUN: 4 флагманских гайда + GUIDE.md + tests/scenarios (2 фикстуры) обновлены; git mv .saitranslate -> .saipen/saitranslate в этом репо (реальный output, не библиотека); оба валидатора PASS; ship -> 7.35.0
+- 23.07.26 01:50 [E-572] [parent: E-571] [T-none] H: user уточнил ещё раз -- не либо доки либо софт, а ОБА разом когда есть; плюс держать руку на пульсе изменений проекта, не разовая проверка
+- 23.07.26 01:55 [E-573] [parent: E-572] [T-none] RUN: translate.md §2 переписан -- (a) доки и (b) реальные UI-строки оба в скоупе одновременно, не exclusive ветки; §3 "Maintenance and Update" из пассивного "if exists, compare" в активный per-run drift scan -- каждый запуск пересканирует обе поверхности, ловит что изменилось с прошлого раза, честно репортит partial вместо round-up to done
+- 23.07.26 02:00 [E-574] [parent: E-573] [T-none] RUN: CHANGELOG heading опять слетел (третий раз за сессию, тот же паттерн) -- поймал и починил до коммита; оба валидатора PASS; ship -> 7.35.1
 
 
