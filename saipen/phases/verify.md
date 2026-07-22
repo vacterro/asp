@@ -51,7 +51,7 @@ Before picking the next ticket:
   the tree still carries partial changes -- never silently pretend the
   tree is clean when it isn't.
 
-After VERIFY pass: tick BOARD, next ticket or STATE -> REVIEW.
+After VERIFY pass: STATE -> REVIEW. There is no 'next ticket' branch here -- `REVIEW` and `SHIP` are mandatory for the current ticket before picking up another.
 `goal_mode: true`? Increment `goal_tickets` by 1 and checkpoint STATE
 (RFC § 2.4). That hits the 3-`goal_waves`/20-`goal_tickets` cap? STOP here
 instead of continuing -- full BOARD/STATE checkpoint, report progress, wait

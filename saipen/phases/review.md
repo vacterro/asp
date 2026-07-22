@@ -24,6 +24,6 @@ finding. A NEW finding uncovered by the fix itself starts its own fresh
 2-pass count -- this caps re-litigating the same finding, not REVIEW as a
 whole.**
 
-If P0/P1 clear and all tickets verified: STATE -> SHIP. There is no
+If P0/P1 clear: STATE -> SHIP. There is no
 "STATE -> DONE" branch here -- SHIP is mandatory before DONE, even for a
 two-line bugfix, even under `goal_mode`.
