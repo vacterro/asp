@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.32.0 -- 2026-07-22 -- all 33 language guides moved into guides/
+- User's call: root directory had 33 `GUIDE_XX.md` files cluttering it alongside README/SPEC/LICENSE. Moved all of them (`GUIDE_AR.md` through `GUIDE_ZH.md`, plus `GUIDE_DED.md`) into a new `guides/` folder via `git mv`, preserving file history. `GUIDE.md` itself (the neutral hub, referenced directly by README and SPEC) stays at root.
+- Updated every link: `GUIDE.md`'s 33-entry language table and `README.md`'s 5 badge links + language table now all point at `guides/GUIDE_XX.md`. Grepped for dangling `](GUIDE_XX.md)` references after the move -- none found.
+- No content change to the guides themselves, no runtime/protocol impact (these files aren't in `tools/validate.py`'s manifest). Both validators green.
+
 ## 7.31.2 -- 2026-07-22 -- all 31 remaining language guides enriched
 - User's follow-up after the EN/RU/neutral enrichment: enrich every other language guide too. Discovered all 31 (`GUIDE_EE.md` through `GUIDE_HR.md`, plus the standalone `GUIDE_DED.md` cheat sheet) share one much thinner template than GUIDE_EN/RU -- title, 1-2 line intro, 3-step quickstart, an 8-row bare command table -- and all still said "22 languages" despite the translate spec expanding to 32 (commit c6d5c2a). Scope kept proportional to what was asked and to each file's own format: added a compact translated "Good to know"-equivalent block (dirty-tree normalcy, KNOWLEDGE/ ADR pattern, capability degradation, install_hook) to all 31 files, in that file's own language, plus the 22->32 fix. Did not attempt a full rewrite to GUIDE_EN.md's complete depth (Steps 1-5 narrative, kitchen section, scenario-annotated command table) -- these 31 never had that content even before this session touched the guides, so bringing them to full parity is a materially larger, separate effort flagged back to the user rather than assumed.
 - Both validators green.
