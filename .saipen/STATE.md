@@ -1,7 +1,7 @@
 ---
 phase: DONE
 task: none
-next_action: "v7.36.0 shipped -- adversarial pass over v7.35.0's own .saipen/ consolidation found 4 real holes: nested STATE/BOARD/LOG ambiguity now that same-named files exist at multiple depths (RFC § 1.1 hardened -- unqualified always means the exact project-root path), kitchen bullet now disambiguates subSaipen kitchens same as it already did for TRANSLATE, dual-location extension conflict gets an explicit resolution rule (.saipen/ copy authoritative, root-level stale, ticket cleanup, never merge/guess), saipen sub spawn now requires .saipen/ to already exist. Scenario row 23 + fixture. No open tickets. Board empty -- bare `saipen` auto-transitions to HUNT per RFC § 2.1."
+next_action: "v7.37.0 shipped -- a real cross-project test (another agent migrating a different project's .saitranslate/) exposed that TRANSLATE's legacy-path handling was thinner than extensions' equivalent. RFC § 2.1 TRANSLATE bullet now mirrors § 1.9 exactly: never-both, dual-location-conflict resolution, git mv command + one LOG line. phases/translate.md now states the legacy path and the .saipen/-existence precondition directly instead of relying on the full RFC. Scenario rows 24 (translate-dual-location-conflict) and 25 (spawn-requires-init, backfilling v7.36.0's own uncovered precondition) + fixtures. No open tickets. Board empty -- bare `saipen` auto-transitions to HUNT per RFC § 2.1."
 blocker: none
 saipen_version: 7
 saipen_home: "V:\\___VAC\\__K\\__CODE\\_AI_STUFF_AGENTIC\\_SAIPEN"
@@ -11,7 +11,7 @@ requires:
   - git
 mode: full
 goal_mode: false
-updated: 2026-07-23T02:30:00Z
+updated: 2026-07-23T04:00:00Z
 ---
 
 

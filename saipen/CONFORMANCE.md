@@ -45,3 +45,5 @@ fixture state why, not silently.
 | 21 | Dirty tree on continuation (RFC § 1.5, v7.29.0) | `dirty-tree-continuation` -- behavioral, README-only |
 | 22 | Parallel TRANSLATE doesn't stomp shared STATE (RFC § 2.1, `phases/translate.md`, v7.34.0) | `parallel-translate-isolation` -- behavioral, README-only |
 | 23 | Dual-location extension conflict resolved, never merged/guessed (RFC § 1.9, v7.36.0) | `extension-dual-location-conflict` -- behavioral, README-only |
+| 24 | Dual-location TRANSLATE conflict resolved, never merged/guessed (RFC § 2.1, v7.37.0) | `translate-dual-location-conflict` -- behavioral, README-only |
+| 25 | `saipen sub spawn` / parallel TRANSLATE both refuse on a project with no `.saipen/` yet, instead of silently triggering INIT (RFC § 1.9 v7.36.0, § 2.1 v7.37.0) | `spawn-requires-init` -- behavioral, README-only |

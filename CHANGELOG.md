@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.37.0 -- 2026-07-23 -- TRANSLATE's legacy-path handling brought up to the same bar as extensions'
+Prompted by watching a real migration in the wild: a separate agent (Antigravity, on an unrelated project) was told to move root-level `.saitranslate/` to `.saipen/saitranslate/` and got the mechanics right on its own -- but the protocol itself had nothing telling it to. TRANSLATE's legacy clause was thinner than extensions' equivalent (§ 1.9), and `phases/translate.md` didn't mention the legacy path at all.
+
+- RFC § 2.1's TRANSLATE bullet now mirrors § 1.9 exactly: never maintain both `.saitranslate/` and `.saipen/saitranslate/` at once, the migration command spelled out (`git mv .saitranslate .saipen/saitranslate`, one LOG line), and the same dual-location-conflict resolution (`.saipen/saitranslate/` authoritative, root copy stale, ticket its removal, never merge or guess which is newer).
+- `phases/translate.md` now states the legacy path and precondition directly, instead of relying on an agent that only loads the phase doc -- not the full RFC -- to already know.
+- A parallel TRANSLATE instance now carries the same `.saipen/` precondition `saipen sub spawn` already had since v7.36.0: no `.saipen/` yet, refuse and point at `saipen set`, never improvise a bootstrap.
+- v7.36.0 shipped `saipen sub spawn`'s own precondition without conformance coverage -- backfilled. Scenario rows 24 (`translate-dual-location-conflict`) and 25 (`spawn-requires-init`) added, both behavioral/README-only, mirroring row 23's pattern.
+
+Both validators green.
+
 ## 7.36.0 -- 2026-07-23 -- adversarial pass over yesterday's own consolidation, four real holes
 User asked for another full logic-holes overview. Focused on the newest, least battle-tested surface: v7.35.0's `.saipen/` consolidation, since restructuring the file model is exactly the kind of change most likely to have introduced fresh ambiguity nobody stress-tested yet. Found four:
 
