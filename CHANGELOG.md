@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.33.4 -- 2026-07-22 -- full-project integrity pass: two real bugs found, both fixed
+User asked for a fresh whole-project look. Both validators green going in; the new finds were things automation doesn't check:
+- **`guides/GUIDE_EN.md` and `GUIDE_RU.md` still said "22 languages"** in their own command table's `saipen translate` row -- missed during the earlier 31-file batch fix because these two richer files phrase the sentence differently from the thin template the grep matched. Fixed to 32; swept the whole repo for any other live "22 language(s)" mention -- zero left outside history (LOG.md/CHANGELOG.md, correctly untouched).
+- **Their command tables had no `saipen sub` row**, unlike `GUIDE_DED.md` which got one in v7.33.2 -- inconsistent treatment of the same fact across flagship guides. Added, same experimental framing.
+- Caught and fixed a Russian grammar typo introduced in the same edit ("ко реальному" -> "к реальному").
+- Verified clean otherwise: no dangling `extensions/multi-agent/` references anywhere, no dangling `](GUIDE_XX.md)` old-path links, `.saipen/BOARD.md` genuinely empty (matches every recent `next_action` claim), `CONFORMANCE.md` correctly has no scenario row for `extensions/subs/` (same precedent as every other extension -- opt-in layer, not Core-tested).
+- Noted, not fixed (cosmetic/external, not a repo integrity issue): GitHub's latest Release is still `v7.22.0` while tags run to `v7.33.4` -- a release-cutting gap, not a correctness one.
+
+Both validators green.
+
 ## 7.33.3 -- 2026-07-22 -- extensions/subs/README.md: one-line reminder, read-only is policy not a wall
 Follow-up on a reviewer's comment about v7.33.0's design: `PROTOCOL.md` § 1 already says `mode: read-only` is procedural (no universal technical lock, same footing as RFC § 1.1's destructive-op rule) -- correct and already honest, nothing to fix there. What was missing: the Quick Start path (`README.md`, the file someone actually reads before spawning one) never said it. One line added where `saipen sub spawn` hands off to another agent -- if real isolation is wanted, run it in its own worktree or a directory-restricted session, not the same full-access agent on its honor. Single mention, not repeated elsewhere. Both validators green.
 
