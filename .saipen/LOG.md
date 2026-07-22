@@ -554,5 +554,7 @@
 - 22.07.26 23:28 [E-552] [parent: E-551] [T-none] RUN: остальное чисто -- ноль dangling multi-agent ссылок, ноль старых GUIDE_XX.md путей, BOARD.md реально пуст (матчит все next_action), CONFORMANCE.md корректно без строки под subs (тот же прецедент что у всех extensions). Отдельно отметил не-баг: GitHub Release завис на v7.22.0 при тегах до 7.33.x -- косметика, не целостность репо; ship -> 7.33.4
 - 22.07.26 23:35 [E-553] [parent: E-552] [T-none] H: user -- продолжай, чтобы проект был цельным и логичным (согласие на Release)
 - 22.07.26 23:38 [E-554] [parent: E-553] [T-none] RUN: gh release create v7.33.4 -- заметки сгруппированы по темам (validator/distribution, multi-agent hardening, style, docs, extensions/subs, housekeeping) вместо построчного дампа 20+ версий CHANGELOG; latest release теперь v7.33.4 вместо годовалого v7.22.0; homepageUrl репо всё ещё пустой -- не мой звонок, нужен URL от юзера, просто зафиксировал
+- 22.07.26 23:45 [E-555] [parent: E-554] [T-none] H: user спросил что вписать в homepageUrl
+- 22.07.26 23:47 [E-556] [parent: E-555] [T-none] RUN: gh repo edit --homepage -> GUIDE.md (не выдумывал внешний сайт, которого нет); подтверждено gh repo view
 
 
