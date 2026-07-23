@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.46.0 -- 2026-07-23 -- VERIFY/REVIEW's SCOUT|BUILD targets explained, a false alarm laid to rest
+User brought two more external audits (`tofix/saipen_audit2.md`, 28 findings; `tofix/saipen_audit3.md`, a raw 120-observation reasoning dump that cut off mid-write). Triaged both against the live files rather than trusting either at face value -- most overlapped what v7.43.0-v7.45.0 already closed or what's already tracked in `BOARD.md`'s `## BLOCKED` (`T-127` covers the undocumented `DONE -> ADD` / `ADD -> HUNT` rows both audits also flagged).
+
+One claim was repeated independently by both audits: the transition table's `VERIFY -> REVIEW | SCOUT | BUILD | BLOCKED` row supposedly contradicts `CHANGELOG` v7.18.0's own record of narrowing that exact row to `REVIEW | BLOCKED` -- read as either a regression or a lying changelog. Checked v7.18.0's entry verbatim and the live `phases/verify.md`: not a regression. v7.18.0 removed a real bug (a failing ticket bouncing back to `BUILD`/`SCOUT` for a retry instead of hitting the hypothesis/fix-cycle cap). `verify.md`'s current `SCOUT`/`BUILD` targets serve a completely different, later-added purpose -- after the cap trips and the failing ticket moves to `## BLOCKED`, the agent picks up a *different* workable ticket, landing in `SCOUT` or `BUILD` for that one. Both audits saw only the table row, never `verify.md`'s actual text, and drew the wrong conclusion from a real but incomplete observation.
+
+Since two independent runs tripped on the identical misreading, added a permanent clarification directly at the transition table (`RFC.md` § 1.6) explaining what those targets actually mean and citing v7.18.0 by name, so the next audit -- human, model, or MARKHUNT -- doesn't have to rediscover this from scratch.
+
+Both validators green.
+
 ## 7.45.0 -- 2026-07-23 -- MARKHUNT's own self-contradiction fixed at the root
 Continued the MARKHUNT backlog triage: the remaining two P0 findings, plus one that turned out to hit this session's own recent work directly.
 
