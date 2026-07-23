@@ -28,6 +28,14 @@ Rejected hypotheses stay logged; never re-test without new evidence.
 **Cap: 3 dead hypotheses OR 2 failed fix cycles -> move THIS ticket to the
 `## BLOCKED` section on `BOARD.md` with the facts + dead ends noted on it,
 then check for another unblocked `TODO` ticket and work that instead (STATE -> `SCOUT` or `BUILD`).**
+**Hysteresis**: this ticket's `| blocker:` field already carries text from
+an earlier round (someone moved it back to `## TODO` and this is a repeat
+trip through the same cap)? Do not silently spend another fresh 3/2 budget
+retrying the same approach -- append this round's facts to the existing
+`| blocker:` text rather than overwriting it, and go `STATE.phase: BLOCKED`
+(`phases/blocked.md`) instead of just picking up other work. Two independent
+failed attempts at the same ticket is itself the signal that mechanically
+retrying won't help; it needs a human decision, not a third identical cycle.
 `STATE.phase: BLOCKED` (which loads
 `phases/blocked.md` and stops for the user) is reserved for when no other
 ticket on the board is workable -- one stuck ticket MUST NOT halt a session

@@ -59,10 +59,11 @@ File: `<name>/kitchen/OUTBOX.md`. The only channel back to the main agent.
 # OUTBOX
 
 ## WIKI-001: short description
-- **status:** ready | draft | blocked
+- **status:** ready | draft | blocked | reviewed
 - **summary:** one line, what was found or produced
 - **main_project_refs:** [src/foo.py, ...]
 - **critical:** true | false
+- **severity:** P0 | P1 | P2 (optional -- matches `phases/review.md`'s own taxonomy; helps the main agent pick what to collect first when several are `critical: true`)
 - **details:**
   What was found, what's proposed, why it matters.
 ```
@@ -72,9 +73,12 @@ File: `<name>/kitchen/OUTBOX.md`. The only channel back to the main agent.
 | `ready` | Done, main agent may act on it |
 | `draft` | Still in progress, main agent ignores |
 | `blocked` | Waiting on something external, reason in `details` |
+| `reviewed` | Collected already (§ 4) -- kept as history, not deleted; safe to leave, gets swept whenever `saipen sub clean` or a `HUNT` pass (`phases/hunt.md`) touches this subSaipen's `kitchen/` like any other stale content |
 
 `critical: true` = bug, broken behavior, data loss, security issue.
 `critical: false` = improvement, docs, refactor, cosmetic.
+
+**Backpressure**: this is manually invoked, not a daemon (§ 4) -- but a subSaipen that self-planned its own backlog (bare PLAN, TEMPLATE's default `next_action`) can still grind through many tickets unsupervised before anyone runs `collect`. If more than 10 `ready` entries would accumulate unreviewed, the subSaipen SHOULD pause further ticket completion and set its own `phase: BLOCKED` with `blocker: OUTBOX awaiting main agent collect` rather than continuing to pile up findings nobody's seen yet -- the same `BLOCKED` phase every subSaipen already has legally available (§ 8), no new lifecycle state.
 
 ## 3. Ticket ID namespace
 
@@ -88,6 +92,14 @@ File: `<name>/kitchen/OUTBOX.md`. The only channel back to the main agent.
 Each subSaipen numbers its own tickets independently; the prefix is what
 keeps them unambiguous once folded into the main board.
 
+**Folding onto the main board**: a subSaipen ID (`WIKI-001`, `HUNT-003`, ...)
+is never written directly onto the main `BOARD.md` as a ticket ID -- RFC
+§ 1.2 requires the `T-###` shape there, no exceptions for extension-sourced
+tickets. Collecting a finding always creates a normal new `T-###` ticket;
+the original subSaipen ID is preserved in that ticket's own description or
+`| blocker:` text (e.g. `T-057 [from saiwiki HUNT-003] ...`), never
+repurposed as the ticket ID itself.
+
 ## 4. Handoff
 
 **Main agent -> subSaipen**: writes tickets into `<name>/BOARD.md`'s
@@ -100,15 +112,53 @@ Pick Rule as Core (RFC § 1.6).
 3. Write the combined result into `kitchen/OUTBOX.md` as `status: ready`, and move the ticket to its own `## DONE`.
 
 Whenever the main agent chooses to check (during `HUNT`, at the top of `saipen continue`, or via `saipen sub collect`):
-1. Read every active subSaipen's `OUTBOX.md`.
-2. For each `ready` entry: `critical: true` -> ticket on the main `BOARD.md` immediately; `critical: false` -> append to `_shared/inbox.md` for the next planning round.
-3. Clear the entry from `OUTBOX.md` (or mark it reviewed) and append one
-   `RUN:` line to the *main* `LOG.md` naming what happened to it --
-   folding a subSaipen's finding into the project is exactly the kind of
-   event `LOG.md` exists to record.
+1. Read every active subSaipen's `OUTBOX.md`. An entry that's sat unreviewed
+   a while may have gone stale (file renamed, bug already fixed by another
+   route) -- spot-check `main_project_refs` still make sense against current
+   HEAD before ticketing. Clearly stale -> mark `status: stale` in the
+   entry and skip it, don't ticket a ghost. This is the same freshness
+   discipline `PREPARE` already applies to one ticket, just extended to a
+   backlog that may have waited days for `collect` to run.
+2. For each `ready` entry: `critical: true` -> ticket on the main `BOARD.md` immediately; `critical: false` -> append to `_shared/inbox.md` (shape defined below) for the next planning round. The main agent MAY skip any individual entry and leave it `ready` for a later collect -- nothing requires swallowing the whole OUTBOX in one pass.
+3. **Write order matters for crash safety**: create the main ticket and
+   append the main `LOG.md` line (below) FIRST, THEN mark the OUTBOX entry
+   `reviewed` (or clear it) LAST -- same asymmetric-safety principle as
+   RFC § 1.5's checkpoint ordering. A crash between the two leaves a
+   worst case of one duplicate ticket on retry (annoying, safe, easy to
+   spot and merge) rather than a silently lost finding, which is the
+   failure mode the reverse order would risk.
+   `RUN:` line format: `- DATE [E-###] [parent: E-###] [T-###] [agent:
+   <subSaipen_name>] RUN: collect <name>-### -> T-###` -- naming the
+   subSaipen's own ID in the free text is the traceability link between
+   the two event graphs; RFC § 1.2's `[parent: E-###]` can't reach across
+   files into the subSaipen's own separate `LOG.md`, so this text
+   reference does the job instead, no RFC change needed.
+   The subSaipen's own `LOG.md` MAY also get a mirrored one-line note when
+   collected (`RUN: collected by main agent -> T-###`) for a complete
+   trail on both sides -- optional, since the subSaipen's ticket already
+   reached `## DONE` at `PREPARE` time regardless of what collect does
+   with it (§ 4 above); this is symmetry, not a dependency.
 
 No ACK ceremony, no timers, no lifecycle states -- this is a manually
 invoked agent, not a daemon; nothing here needs liveness detection.
+
+**`_shared/inbox.md` shape and ownership**:
+```markdown
+# Inbox
+
+- DATE | source: <name>-### | <one-line summary> | ref: [src/foo.py]
+```
+Main-agent-owned: it's the one deciding what to do with these at the next
+`PLAN`, so it's the one that prunes. SubSaipens are append-only against
+this file -- add a new line, never edit an existing one, which sidesteps
+any write race between two subSaipens collecting at once without needing
+RFC § 1.4's full claim machinery (this is a shared append log, not a
+claimed ticket). Prune rule: an entry older than 30 days, or superseded by
+a later entry with the same `ref:`, MAY be deleted -- `saipen sub clean`
+or a `HUNT` pass are the natural moments, not a standalone job. Bare
+`saipen plan` (Proposal Mode, `phases/plan.md`) SHOULD read this file
+before generating tickets -- that's the "next planning round" § 4 above
+refers to.
 
 ## 5. MANIFEST.md
 
@@ -119,11 +169,16 @@ agent should remember to check -- their own `STATE.md` already carries
 ```markdown
 # SubSaipen Manifest
 
-- saiwiki -- .saipen/extensions/subs/saiwiki/
-- saihunt -- .saipen/extensions/subs/saihunt/
+- saiwiki -- .saipen/extensions/subs/saiwiki/ | last_collect: ISO8601 UTC
+- saihunt -- .saipen/extensions/subs/saihunt/ | last_collect: ISO8601 UTC
 ```
 
-Add a line on `spawn`, remove it on `clean`. That's the whole lifecycle.
+`| last_collect:` is OPTIONAL, updated by `saipen sub collect` each time it
+touches that subSaipen -- a way to notice one's gone quiet (an old
+timestamp next to an otherwise-fresh manifest), not a second status field
+to keep in sync; staleness is read off the date itself, nothing stored
+twice. Add a line on `spawn`, remove it on `clean`. That's the whole
+lifecycle.
 
 ## 6. Staleness
 
@@ -138,14 +193,19 @@ Legal only while `.saipen/extensions/subs/` (or legacy root `extensions/subs/`) 
 
 | Command | Does |
 |---|---|
-| `saipen sub list` | Read `MANIFEST.md`; for each entry, read its `STATE.md` and report `phase`/`task`. |
-| `saipen sub spawn <name>` | **First-run bootstrap, then spawn.** If this project has no `.saipen/extensions/subs/` yet: copy `PROTOCOL.md`, `README.md`, `TEMPLATE/`, and an empty `_shared/inbox.md` from `<saipen_home>/extensions/subs/` (the SAIPEN home's own copy of this extension -- unaffected by where a consuming project attaches it; the home path is already in `STATE.md`'s `saipen_home` field, RFC § 1.7 -- no manual copy needed, this IS the explicit ask that makes copying it in appropriate, unlike `saipen set`'s general no-auto-populate rule in RFC § 1.9). Then, every run: copy `TEMPLATE/` to `.saipen/extensions/subs/<name>/`, set `agent: <name>` in its `STATE.md`, add a line to `MANIFEST.md` (creating it first if this was also the bootstrap run). |
+| `saipen sub list` | Read `MANIFEST.md`; for each entry, read its `STATE.md` and report `phase`/`task`. Any entry showing `phase: BLOCKED` gets an explicit WARNING appended to the output, not just a quiet status line -- a subSaipen can't escalate itself to a human on its own, so `list` is what surfaces it. |
+| `saipen sub status <name>` | Read-only peek: report `<name>`'s `kitchen/OUTBOX.md` counts (ready/draft/blocked/reviewed, how many critical) without modifying anything or running collect. |
+| `saipen sub spawn <name>` | **First-run bootstrap, then spawn.** If this project has no `.saipen/extensions/subs/` yet: verify `<saipen_home>/extensions/subs/PROTOCOL.md` actually exists first -- `saipen_home` stale or the clone moved/deleted? `BLOCKED` with `blocker: saipen_home stale: <path>`, never copy from a path that didn't check out. Otherwise copy `PROTOCOL.md`, `README.md`, `TEMPLATE/`, and an empty `_shared/inbox.md` from there (the SAIPEN home's own copy of this extension -- unaffected by where a consuming project attaches it; the home path is already in `STATE.md`'s `saipen_home` field, RFC § 1.7 -- no manual copy needed, this IS the explicit ask that makes copying it in appropriate, unlike `saipen set`'s general no-auto-populate rule in RFC § 1.9). Then, every run: if `.saipen/extensions/subs/<name>/` already exists, refuse and report it -- point at `saipen sub clean <name>` first if replacement is actually intended, never silently overwrite an existing subSaipen's history. Otherwise copy `TEMPLATE/` to `.saipen/extensions/subs/<name>/`, set `agent: <name>` (replacing TEMPLATE's placeholder) and `saipen_home: <path>` (copied from the main project's own `STATE.md`) in its `STATE.md`, add a line to `MANIFEST.md` (creating it first if this was also the bootstrap run). Two agents spawning concurrently is RFC § 1.4's existing concurrency boundary (one writer at a time), not a new problem this command invents. |
+| `saipen sub pause <name>` | Set `<name>`'s own `STATE.phase: BLOCKED` with `blocker: paused by main agent` -- freezes it (no new findings, no ticket work) without destroying its board/log/outbox, unlike `clean`. Useful right before a `SHIP` to avoid a subSaipen producing findings mid-ship. |
+| `saipen sub resume <name>` | Set `<name>`'s `STATE.phase` back to whatever it was doing before `pause` (its own `LOG.md` tail says what that was). |
 | `saipen sub collect` | Run the Handoff procedure (§ 4) against every active subSaipen. |
-| `saipen sub clean <name>` | Remove the `MANIFEST.md` line and the `.saipen/extensions/subs/<name>/` folder -- only once its `BOARD.md` is empty and its `OUTBOX.md` has nothing `ready` left unreviewed. |
+| `saipen sub clean <name>` | **MUST check before removing, not just describe the precondition**: read `<name>/BOARD.md` and `<name>/kitchen/OUTBOX.md` first. Any `TODO`/`DOING` ticket, or any `ready` OUTBOX entry, still there -> refuse and report exactly what's outstanding, do not remove. Only once `BOARD.md` is empty (`DONE` tickets don't count against this) and nothing sits `ready` unreviewed does it remove the `MANIFEST.md` line and the `.saipen/extensions/subs/<name>/` folder. |
 
 `saipen sub spawn` requires a project that already has `.saipen/` (i.e. `saipen set` already ran) -- a subSaipen attaches to a main project's continuation state, it isn't one on its own. No `.saipen/` at all yet? Tell the user to run `saipen set` first; don't silently trigger `INIT` as a side effect of an unrelated command.
 
 First `saipen sub spawn` in a project no `saipen_home` was ever recorded for (state written before v7.25.0, or a manual/degraded bootstrap)? Ask once -- `WAIT: path to the saipen clone to bootstrap subs from` -- never guess a path.
+
+A `BLOCKED` subSaipen sitting unreviewed indefinitely is a silent rot risk -- the main agent MUST check `saipen sub list`'s output for `BLOCKED` warnings at least once per autonomous `HUNT` pass (RFC § 2.1), piggybacking on a cadence that already runs on its own rather than inventing a new dedicated timer.
 
 ## 8. File shape for a subSaipen
 

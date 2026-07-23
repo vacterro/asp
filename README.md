@@ -12,7 +12,7 @@ and resumes work in under a minute -- no rebriefing, any vendor, any day.
 
 **One command. Zero amnesia.**
 
-**v7.48.0** | [Spec](SPEC.md) | [Guide](GUIDE.md) | [RFC](saipen/RFC.md) | [Style](saipen/STYLE.md) | [UI](saipen/UI.md) | [Conformance](saipen/CONFORMANCE.md) | plain markdown | zero deps | MIT
+**v7.49.0** | [Spec](SPEC.md) | [Guide](GUIDE.md) | [RFC](saipen/RFC.md) | [Style](saipen/STYLE.md) | [UI](saipen/UI.md) | [Conformance](saipen/CONFORMANCE.md) | plain markdown | zero deps | MIT
 
 [![Russian Guide](https://img.shields.io/badge/📖_ELI5_Guide-НА_РУССКОМ-red?style=for-the-badge)](guides/GUIDE_RU.md)
 [![English Guide](https://img.shields.io/badge/📖_ELI5_Guide-IN_ENGLISH-blue?style=for-the-badge)](guides/GUIDE_EN.md)
@@ -34,7 +34,7 @@ Memory lives in the project, not in a model's head. `Project -> Memory -> LLM` b
 ### Key Protocol Logic & Guarantees
 - **Core State Machine**: `INIT → PLAN → SCOUT → BUILD → VERIFY → REVIEW → SHIP → DONE | BLOCKED`
 - **Zero-Prompt Autonomy**: No open to-dos left? Auto-transitions `HUNT` (scan bugs) → `ADD` (evolve features) → `HUNT` loop. Zero questions asked.
-- **Explicit Triggers**: `/saipen clean` (repo scrub), `/saipen translate` (isolated `.saipen/saitranslate/` factory), `/saipen validate` (conformance check), `/saipen goal` (autonomous wave execution).
+- **Explicit Triggers**: `/saipen clean` (repo scrub), `/saipen translate` (isolated `.saipen/saitranslate/` factory), `/saipen markhunt` (dry uncapped audit, records only), `/saipen prepare` (package work for handoff), `/saipen validate` (conformance check), `/saipen goal` (autonomous wave execution). Meta/control: `/saipen status` (read-only report), `/saipen stop` (checkpoint and halt). Full list: RFC.md § 1.10.
 - **Strict Reliability**: Batch input parsing (surgical 1-by-1 tickets), dirty-tree adoption (never wipes uncommitted work), secret redaction (`sk-***`).
 
 ## Projects Powered by SAIPEN

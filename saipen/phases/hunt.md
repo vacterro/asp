@@ -53,7 +53,17 @@ use `phases/clean.md`'s stale definition (owning ticket `DONE` and off
 is what actually keeps kitchen/ bounded: `CLEAN` only runs when a user
 explicitly asks for it, `HUNT` runs every autonomous pass with no tasking
 required, so a kitchen file can't outlive its usefulness for more than one
-maintenance cycle.
+maintenance cycle. Same stale definition, same sweep, extends to every
+`.saipen/extensions/subs/<name>/kitchen/` present -- a subSaipen's own
+scratch is a distinct folder, not `.saipen/kitchen/` itself, but it is
+still this project's kitchen content and doesn't get a free pass just for
+living one level deeper.
+
+Before ticketing any finding, check it isn't already tracked anywhere on
+`BOARD.md` -- including `## BLOCKED`, not just `## TODO`/`## DOING`. A
+known issue already sitting blocked is not a fresh discovery; re-ticketing
+it under a new ID just forks one problem into two records. Same finding,
+already tracked -> skip it, it's not new signal.
 
 Ambiguous -> ticket + user confirms.
 Findings ticketed (not clean)? STATE -> `PLAN` (or straight to `SCOUT` if

@@ -3,7 +3,7 @@
 Implementations MUST pass self-check across three vectors:
 1. **Repo Validation**: `STATE.md`, `BOARD.md`, `LOG.md`, and `KNOWLEDGE/` MUST conform to the shapes RFC.md § 1.2 defines, enforced by `tools/validate.py` (canonical -- validates STATE.md against `extensions/schemas/state.schema.json` directly, plus graph checks: E-### uniqueness/monotonicity, parent resolution), with `tests/validate.sh` / `validate.ps1` as the frozen portable floor for hosts without Python. `board.schema.json`/`log.schema.json` remain descriptive reference -- see `extensions/schemas/README.md`.
 2. **Session Validation**: `BOARD.md`'s `needs:` graph MUST be acyclic AND every reference MUST resolve to a ticket that actually exists on the board -- a dangling reference is worse than a cycle, since nothing else catches it. `LOG.md` graph parent-child links MUST resolve.
-3. **Phase Contract Validation**: Stated `mode` MUST legally permit the current `phase` (RFC.md § 1.3). `phase` MUST be one of the fourteen enum values RFC.md § 1.6 defines, and any phase-to-phase transition MUST be legal per § 1.6's transition table.
+3. **Phase Contract Validation**: Stated `mode` MUST legally permit the current `phase` (RFC.md § 1.3). `phase` MUST be one of the sixteen enum values RFC.md § 1.6 defines, and any phase-to-phase transition MUST be legal per § 1.6's transition table.
 
 ## TEST-001: The Continuation Test
 Any release of this protocol MUST pass the gold standard test:
@@ -49,3 +49,4 @@ fixture state why, not silently.
 | 25 | `saipen sub spawn` / parallel TRANSLATE both refuse on a project with no `.saipen/` yet, instead of silently triggering INIT (RFC § 1.9 v7.36.0, § 2.1 v7.37.0) | `spawn-requires-init` -- behavioral, README-only |
 | 26 | HUNT skip requires an exact HEAD-hash match; mtime/diff-timing is never a substitute for actually running the six categories (`phases/hunt.md`, v7.41.0) | `hunt-skip-requires-exact-hash-match` -- behavioral, README-only |
 | 27 | MARKHUNT records findings without fixing/capping, unlike HUNT (`phases/markhunt.md`) | `markhunt-dry-record-only` -- behavioral, README-only |
+| 28 | VERIFY hysteresis: a ticket blocked a second time escalates to session-level `BLOCKED` instead of spending a fresh retry budget (`phases/verify.md`) | `verify-hysteresis-second-block` -- behavioral, README-only |
