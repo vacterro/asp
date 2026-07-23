@@ -33,27 +33,56 @@ actually exhausted, not until some round number feels sufficient.
    copy-pasted logic that should have been unified, abstractions that
    never got followed through.
 5. Familiarity blindness: things so normalized to whoever's been
-   building this that they stopped registering as a problem -- the
-   entire reason an outside-auditor pass exists at all.
+   building this that they stopped registering as a problem -- "that's
+   just how it is" IS a finding, not an excuse to skip one. Over-capture
+   beats under-capture here -- this is the one category HUNT never
+   looks for at all.
 
 Still evidence-based, same as HUNT and PLAN: a real, cited fact
-(file:line, a command's actual output, a quoted contradiction) for
-every finding, never a hallucinated or invented problem just to have
-something to report.
+(file:line, a command's actual output, a quoted contradiction between
+what a doc claims and what the code does) for every finding. No cite,
+no ticket -- "probably," "seems like," and "looks suspicious" are
+vibes, not evidence, and MARKHUNT doesn't hallucinate findings just to
+look thorough.
 
-**Recording**: every finding becomes a `TODO` ticket on `BOARD.md`,
-tagged so it's identifiable as unvetted audit output rather than
-already-triaged work -- `[MARKHUNT]` prefix in the ticket line (exact
-convention TBD, see integration note in `.saipen/kitchen/`). Group
-related findings under one ticket rather than one-ticket-per-trivial-nit
--- the board stays a to-do list, not a wall of noise. Do not
-reprioritize or reorder existing tickets to make room -- append per
-normal board-order rules.
+**Recording -- `## BLOCKED`, never `## TODO`.** Every finding becomes a
+ticket appended to `## BLOCKED` on `BOARD.md`, tagged `[MARKHUNT]`,
+evidence cited inline (`| blocker: unvetted audit -- <file:line or
+command output>`). NEVER `## TODO` -- MARKHUNT's entire output is
+unvetted by construction (uncapped, over-capture-biased, no human has
+looked yet), and `## TODO` is exactly what the normal Pick Rule works
+from on the very next bare `continue`. Landing raw audit output there
+would let an agent start autonomously fixing things nobody asked for or
+agreed were worth fixing. Triage -- moving a specific ticket to
+`## TODO`, dropping the `unvetted audit` blocker -- is a separate,
+later, explicit human/user step, never something MARKHUNT or a
+subsequent `continue` does on its own. Group related findings under one
+ticket rather than one-ticket-per-trivial-nit -- the board stays
+readable, not a wall of noise. Append only -- never reorder or edit
+existing tickets.
+
+**Goal Mode brake.** MARKHUNT never increments `goal_waves` or
+`goal_tickets` (RFC § 2.4) and never falls into HUNT/ADD on completion,
+`goal_mode` or not -- its findings are unvetted, so nothing may treat
+finishing a MARKHUNT pass as a waypoint to keep running through.
+Completion always halts one turn for the user, even mid-`goal_mode`;
+`goal_mode` itself stays whatever it already was, untouched.
+
+**Long-running, so checkpoint like one.** An exhaustive, uncapped pass
+can outlast a single context window. Before that happens (a context
+budget warning, or after finishing each scope category above), overwrite
+`.saipen/kitchen/markhunt_progress.md` with what's scanned, what's left,
+and the running finding count -- overwrite, never append, it's a
+cursor, not a history (history is `LOG.md`, as always). Hitting a
+budget risk mid-pass: LOG a partial-completion line, leave
+`STATE.phase: MARKHUNT` (not `DONE`), `next_action: "saipen markhunt"`
+-- a successor resumes from the progress file's cursor instead of
+restarting the whole surface from zero.
 
 **Completion**: LOG one Event Graph line per RFC § 1.2 -- `- DATE
 [E-###] [parent: E-###] RUN: markhunt -> N findings recorded` -- then
 transition to `DONE`. `DONE`'s own existing priority logic
-(`phases/done.md`) takes it from there -- if tickets are now sitting in
-`TODO`, the very next `saipen continue` picks one up normally. MARKHUNT
-itself never decides what gets worked next; it only makes sure nothing
-stays invisible.
+(`phases/done.md`) takes over from there for whatever's actually in
+`## TODO` -- MARKHUNT's own `## BLOCKED` findings sit untouched until a
+human triages them. MARKHUNT never decides what gets worked next; it
+only makes sure nothing stays invisible.

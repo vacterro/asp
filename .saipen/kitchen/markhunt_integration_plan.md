@@ -43,11 +43,11 @@ fixture + guides, then full ship ritual).
 6. **GUIDE.md / flagship guides (EN/RU/EE/DED)**: one-line command-table
    mention, same pattern as the `saipen plan` row added in v7.40.0.
 
-7. **Decide the BOARD.md tagging convention for real** before writing
-   step 5's fixture -- markhunt.md currently says `[MARKHUNT]` prefix
-   as a placeholder ("exact convention TBD"). Pick one, make
-   markhunt.md's own text match exactly what gets implemented, don't
-   ship it still vague.
+7. ~~Decide the BOARD.md tagging convention~~ RESOLVED: `[MARKHUNT]`
+   tag, findings land in `## BLOCKED` (never `## TODO` -- unvetted
+   output must not feed the Pick Rule on the next bare `continue`),
+   evidence cited inline via the `blocker:` field. markhunt.md's own
+   text now states this exactly -- nothing left vague here.
 
 8. **Full ship ritual** once 1-6 are done: VERSION bump (feature-level),
    CHANGELOG entry, LOG.md entries, STATE.md update, both validators,
