@@ -6,9 +6,10 @@
 
 # SAIPEN
 
-**Continuation protocol for AI coding agents.** Persistent project memory in
-plain markdown, so a cold agent with no chat history runs `/saipen continue`
-and resumes work in under a minute -- no rebriefing, any vendor, any day.
+**Continuation protocol for AI coding agents.** SAIPEN keeps project memory in
+plain markdown, so a cold agent with no chat history runs `/saipen continue`,
+reads `STATE`, `BOARD`, and `next_action`, and resumes work in under a minute
+-- no rebriefing, any vendor, any day.
 
 **One command. Zero amnesia.**
 
@@ -36,10 +37,10 @@ Memory lives in the project, not in a model's head. `Project -> Memory -> LLM` b
 - **Zero-Prompt Autonomy**: No open to-dos left? Auto-transitions `HUNT` (scan bugs) → `ADD` (evolve features) → `HUNT` loop. Zero questions asked.
 - **Explicit Triggers**: `/saipen clean` (repo scrub), `/saipen translate` (isolated `.saipen/saitranslate/` factory), `/saipen markhunt` (dry uncapped audit, records only), `/saipen prepare` (package work for handoff), `/saipen validate` (conformance check), `/saipen goal` (autonomous wave execution). Meta/control: `/saipen status` (read-only report), `/saipen stop` (checkpoint and halt). Full list: RFC.md § 1.10.
 - **Strict Reliability**: Batch input parsing (surgical 1-by-1 tickets), dirty-tree adoption (never wipes uncommitted work), secret redaction (`sk-***`).
-- **In development -- saicrew**: an optional bonus layer (`extensions/subs/`, zero Core changes) for running a multi-agent crew -- one Core writer plus read-only `saihunt`/`saipython` workers reporting through their own `OUTBOX.md`. Under active live testing, not yet verified end-to-end -- see `extensions/subs/crew.md`.
+- **Experimental -- saicrew**: an optional bonus layer (`extensions/subs/`, zero Core changes) for running a multi-agent crew -- one Core writer plus read-only `saihunt`/`saipython` workers reporting through their own `OUTBOX.md`. Under active live testing, not yet verified end-to-end -- see `extensions/subs/crew.md`.
 
 ## Projects Powered by SAIPEN
-- ⚡ **[FastPrompter](https://github.com/vacterro/fastprompter)** — High-performance prompt management tool natively integrated with SAIPEN memory protocol.
+- ⚡ **[FastPrompter](https://github.com/vacterro/fastprompter)** — High-performance prompt management tool built around the SAIPEN memory protocol.
 
 ## Two Layers
 
