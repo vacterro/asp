@@ -2,6 +2,18 @@
 
 > Older entries live in [CHANGELOG_ARCHIVE.md](CHANGELOG_ARCHIVE.md) -- this file keeps the most recent ~10.
 
+## 7.58.0 -- 2026-07-24 -- crew dogfooding: three real spec gaps found and fixed live (T-170)
+
+Running an actual 3-agent crew test on FastPrompter (two free-tier weak models: FreeBuff/OpenCode Zen both on DeepSeek V4 Flash) surfaced real gaps no amount of internal review had caught. Each is fixed at the source, not patched around.
+
+- **Global skill never carried `extensions/subs/` at all.** Confirmed by directly querying FreeBuff's own local `.freebuff/desktop.db` (a real, readable SQLite store -- threads/messages/parts_json) mid-session: the agent loaded the "saipen" skill, read the globally-injected RFC/STYLE/UI, found zero mention of subSaipen roles anywhere, and reasoned `saipython` was a "saipen"+"python" portmanteau -- a plausible wrong guess, not a failed lookup. `bootstrap/inject.sh`/`inject.ps1`'s `copy_skill()` never included `extensions/subs/` in the distributed bundle. Both scripts now copy it; `tools/validate.py`'s `dist_tokens` check extended to catch a regression here. (Re-running the injector against this machine's actual installed skill folders is a separate, larger action -- not done automatically, needs the operator's own go-ahead.)
+- **`TEMPLATE/BOARD.md` shipped empty, no example.** A live saihunt run (once it did understand its role) invented its own board shape by copying `OUTBOX.md`'s bold-field markdown instead of RFC §1.2's checkbox ticket line -- nothing in `PROTOCOL.md` or the template contradicted that guess. Fixed: an explicit example in both `TEMPLATE/BOARD.md` and `PROTOCOL.md` §1, spelling out that the board uses Core's checkbox shape, never the OUTBOX shape.
+- **Spawn instructions never told an agent to set a real `updated:` timestamp.** `PROTOCOL.md` §7 explicitly listed `agent:` and `saipen_home:` as fields to replace at spawn, but not `updated:` -- observed directly: FastPrompter's spawned saihunt bumped only the *date* half of `TEMPLATE/STATE.md`'s placeholder and left the time at `00:00:00` (a partial-placeholder edit, not a real checkpoint). §7 now lists `updated:` explicitly too.
+
+Also fixed (from the same live session, before the above): a project that spawned `subs/` before v7.56.0 has a frozen `PROTOCOL.md` snapshot missing the crew's bare-name command table -- ad-hoc synced in FastPrompter directly; a durable `saipen sub sync`-style refresh path is still open (T-170 remains on the board, live crew re-verification paused by the user pending FreeBuff's own uptime -- unrelated to any of the above).
+
+`tools/validate.py` green throughout.
+
 ## 7.57.0 -- 2026-07-24 -- T-136 closed: MARKHUNT gets a manifest-driven closure self-test
 
 The last open Core ticket -- deferred as design-debt for eight versions because it needed real design, not a rush. MARKHUNT could sweep the surface and declare itself done on pure self-report; HUNT has an exact hash-match skip as a hard closure check, MARKHUNT had nothing analogous. Now it does.

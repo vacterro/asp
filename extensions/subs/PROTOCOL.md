@@ -51,6 +51,22 @@ offers real isolation (a separate working directory, a git worktree scoped
 to `.saipen/extensions/subs/<name>/`), use it. Don't claim automated enforcement
 that isn't there.
 
+**Your own `BOARD.md` uses the checkbox ticket shape, never the OUTBOX
+shape.** "Same STATE.md/BOARD.md/LOG.md shape" above means RFC § 1.2's
+`- [ ] <ID> description | field: value` line under `## DOING`/`## TODO`/
+`## DONE`/`## BLOCKED`, using your own ID prefix (§ 3) in place of `T-###`:
+```markdown
+## TODO
+- [ ] HUNT-001 short description of what to check
+## DONE
+- [x] HUNT-000 already finished, checkbox closed
+```
+This is a *different* shape from `OUTBOX.md`'s bold-field markdown (§ 2) --
+the board is where you track your own work-in-progress; the OUTBOX is the
+finished deliverable leaving through the one door. Don't reuse one shape
+for the other just because `TEMPLATE/BOARD.md` ships empty (that emptiness
+is a starting point, not license to invent a shape).
+
 ## 2. OUTBOX format
 
 File: `<name>/kitchen/OUTBOX.md`. The only channel back to the main agent.
@@ -196,7 +212,7 @@ Legal only while `.saipen/extensions/subs/` (or legacy root `extensions/subs/`) 
 |---|---|
 | `saipen sub list` | Read `MANIFEST.md`; for each entry, read its `STATE.md` and report `phase`/`task`. Any entry showing `phase: BLOCKED` gets an explicit WARNING appended to the output, not just a quiet status line -- a subSaipen can't escalate itself to a human on its own, so `list` is what surfaces it. |
 | `saipen sub status <name>` | Read-only peek: report `<name>`'s `kitchen/OUTBOX.md` counts (ready/draft/blocked/reviewed, how many critical) without modifying anything or running collect. |
-| `saipen sub spawn <name>` | **First-run bootstrap, then spawn.** If this project has no `.saipen/extensions/subs/` yet: verify `<saipen_home>/extensions/subs/PROTOCOL.md` actually exists first -- `saipen_home` stale or the clone moved/deleted? `BLOCKED` with `blocker: saipen_home stale: <path>`, never copy from a path that didn't check out. Otherwise copy `PROTOCOL.md`, `README.md`, `TEMPLATE/`, and an empty `_shared/inbox.md` from there (the SAIPEN home's own copy of this extension -- unaffected by where a consuming project attaches it; the home path is already in `STATE.md`'s `saipen_home` field, RFC § 1.7 -- no manual copy needed, this IS the explicit ask that makes copying it in appropriate, unlike `saipen set`'s general no-auto-populate rule in RFC § 1.9). Then, every run: if `.saipen/extensions/subs/<name>/` already exists, refuse and report it -- point at `saipen sub clean <name>` first if replacement is actually intended, never silently overwrite an existing subSaipen's history. Otherwise copy `TEMPLATE/` to `.saipen/extensions/subs/<name>/`, set `agent: <name>` (replacing TEMPLATE's placeholder) and `saipen_home: <path>` (copied from the main project's own `STATE.md`) in its `STATE.md`, add a line to `MANIFEST.md` (creating it first if this was also the bootstrap run). Two agents spawning concurrently is RFC § 1.4's existing concurrency boundary (one writer at a time), not a new problem this command invents. |
+| `saipen sub spawn <name>` | **First-run bootstrap, then spawn.** If this project has no `.saipen/extensions/subs/` yet: verify `<saipen_home>/extensions/subs/PROTOCOL.md` actually exists first -- `saipen_home` stale or the clone moved/deleted? `BLOCKED` with `blocker: saipen_home stale: <path>`, never copy from a path that didn't check out. Otherwise copy `PROTOCOL.md`, `README.md`, `TEMPLATE/`, and an empty `_shared/inbox.md` from there (the SAIPEN home's own copy of this extension -- unaffected by where a consuming project attaches it; the home path is already in `STATE.md`'s `saipen_home` field, RFC § 1.7 -- no manual copy needed, this IS the explicit ask that makes copying it in appropriate, unlike `saipen set`'s general no-auto-populate rule in RFC § 1.9). Then, every run: if `.saipen/extensions/subs/<name>/` already exists, refuse and report it -- point at `saipen sub clean <name>` first if replacement is actually intended, never silently overwrite an existing subSaipen's history. Otherwise copy `TEMPLATE/` to `.saipen/extensions/subs/<name>/`, set `agent: <name>` (replacing TEMPLATE's placeholder), `saipen_home: <path>` (copied from the main project's own `STATE.md`), **and `updated:` to the real current UTC timestamp** (TEMPLATE's `2026-01-01T00:00:00Z` is a placeholder like the other two, not a value to partially edit -- RFC § 1.2 requires this field genuinely current at every checkpoint, spawn included; §8 below says this file's shape is identical to Core's own for exactly this reason) in its `STATE.md`, add a line to `MANIFEST.md` (creating it first if this was also the bootstrap run). Two agents spawning concurrently is RFC § 1.4's existing concurrency boundary (one writer at a time), not a new problem this command invents. |
 | `saipen sub pause <name>` | Set `<name>`'s own `STATE.phase: BLOCKED` with `blocker: paused by main agent` -- freezes it (no new findings, no ticket work) without destroying its board/log/outbox, unlike `clean`. Useful right before a `SHIP` to avoid a subSaipen producing findings mid-ship. |
 | `saipen sub resume <name>` | Set `<name>`'s `STATE.phase` back to whatever it was doing before `pause` (its own `LOG.md` tail says what that was). |
 | `saipen sub collect` | Run the Handoff procedure (§ 4) against every active subSaipen. |
